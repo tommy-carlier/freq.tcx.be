@@ -33,4 +33,6 @@ body, button, input {
   border-radius: 1.5em;
   background: #5A0BA0;
   color: #FFF;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
