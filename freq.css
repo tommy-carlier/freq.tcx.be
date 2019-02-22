@@ -1,0 +1,36 @@
+html, body {
+  height: 100%;
+  margin: 0; padding: 0;
+  background: #FDF6E3;
+  color: #333;
+}
+
+body, button, input {
+  font: normal 11pt/1.7 'Segoe UI',Avenir,sans-serif;
+}
+
+.Screen {
+  box-sizing: border-box;
+  max-width: 35em;
+  margin: 0 auto;
+  padding: 0 0.5em;
+}
+
+.OccurrenceList {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+.RegisterButton {
+  position: fixed;
+  bottom: 0.5em;
+  right: 0.5em;
+  font-weight: bold;
+  font-size: 200%;
+  width: 3em;
+  height: 3em;
+  border: none;
+  border-radius: 1.5em;
+  background: #5A0BA0;
+  color: #FFF;
+}

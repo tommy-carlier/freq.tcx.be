@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html lang=en-US>
+<html lang=en-US manifest=freq.appcache>
   <head>
     <meta charset=utf-8>
-    <title>Freq</title>
+    <title>freq</title>
     <meta name=viewport content="width=device-width,initial-scale=1">
     <link rel=stylesheet href="freq.css">
     <link rel=canonical href="https://freq.tcx.be/">
   </head>
   <body>
+    <div class=Screen data-type="Default">
+      <h1>freq</h1>
+      <h2>Today</h2>
+      <ul id=todayOccurrences class=OccurrenceList></ul>
+      <button data-action="registerOccurrence" class=RegisterButton>+1</button>
+    </div>
+    <script src="db.js"></script>
     <script src="data.js"></script>
     <script src="app.js"></script>
   </body>

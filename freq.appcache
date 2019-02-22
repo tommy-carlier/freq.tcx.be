@@ -1,0 +1,11 @@
+---
+---
+CACHE MANIFEST
+#{{site.time | date:'%Y%m%d%H%M'}}
+
+CACHE:
+/
+/freq.css
+/app.js
+/data.js
+/db.js
