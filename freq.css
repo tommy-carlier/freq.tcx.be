@@ -28,29 +28,30 @@ ol > li::before {
   display: inline-block;
   width: 3em;
   text-align: right;
-  margin: 0 0.5em 0 -3.5em;
+  margin: 0 0.5rem 0 -3.5rem;
   color: rgba(0, 0, 0, 0.4);
 }
 
 .Screen {
   box-sizing: border-box;
-  padding: 0 0.5em;
+  padding: 0 0.5rem;
   text-align: center;
 }
 
 .Screen > header, .Screen > footer {
   position: fixed;
-  height: 3em;
   left: 0; right: 0;
 }
 
 .Screen > header {
   top: 0;
+  height: 3rem;
   background: linear-gradient(#FDF6E3, #FDF6E3, #FDF6E300);
 }
 
 .Screen > footer {
   bottom: 0;
+  height: 5rem;
   background: linear-gradient(#FDF6E300, #FDF6E3, #FDF6E3);
 }
 
@@ -60,7 +61,7 @@ ol > li::before {
 }
 
 .Screen > main {
-  padding: 3em 0;
+  padding: 3rem 0 5rem;
 }
 
 .OccurrenceList {
@@ -75,15 +76,21 @@ ol > li::before {
 
 .RegisterButton {
   position: absolute;
-  right: 0.5em;
-  bottom: 0.25em;
-  width: 4em;
-  height: 2.5em;
-  border: none;
-  border-radius: 2em;
+  right: 0.25rem;
+  bottom: 0.25rem;
+  width: 5rem;
+  line-height: 3rem;
+  border: solid 1px #390965;
+  border-radius: 0.5rem;
   color: #FFF;
-  background: #5A0BA0;
+  background: linear-gradient(#C9B3DC 0%,#914CCE 5%,#4C038E 95%,#2B054C 100%);
   font-weight: bold;
+  font-size: 130%;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+.RegisterButton:active {
+  background: linear-gradient(#2B054C 0%,#4C038E 5%,#914CCE 95%,#C9B3DC 100%);
+  padding: 0.2rem 0 0 0;
 }
