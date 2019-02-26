@@ -20,6 +20,10 @@
     r.detach();
   }
 
+  function scrollToBottom() {
+    scrollTo(0, d.body.scrollHeight);
+  }
+
   const dayOccurrencesList = d.getElementById('dayOccurrences');
 
   async function displayDayOccurrences(date) {
@@ -44,7 +48,10 @@
     btn.disabled = true;
     try {
       var dt = await data.registerOccurrence(type);
-      if(dt) dayOccurrencesList.appendChild(createOccurrenceItem(dt));
+      if(dt) {
+        dayOccurrencesList.appendChild(createOccurrenceItem(dt));
+        scrollToBottom();
+      }
     } finally {
       btn.disabled = false;
     }
