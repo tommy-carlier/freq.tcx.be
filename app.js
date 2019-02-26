@@ -73,4 +73,9 @@
   });
 
   displayDayOccurrences(new Date());
+
+  applicationCache.addEventListener('updateready', ev => {
+    console.log("Updating application");
+    applicationCache.update();
+  });
 }(document));
