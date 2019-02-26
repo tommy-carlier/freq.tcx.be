@@ -78,4 +78,6 @@
     console.log("Updating application");
     applicationCache.update();
   });
+
+  d.addEventListener('touchstart', () => { }, false);
 }(document));
