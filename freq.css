@@ -3,6 +3,7 @@ html, body {
   margin: 0; padding: 0;
   background: #FDF6E3;
   color: rgba(0, 0, 0, 0.9);
+  scroll-behavior: smooth;
 }
 
 body, button, input {
@@ -33,10 +34,33 @@ ol > li::before {
 
 .Screen {
   box-sizing: border-box;
-  max-width: 35em;
-  margin: 0 auto;
   padding: 0 0.5em;
   text-align: center;
+}
+
+.Screen > header, .Screen > footer {
+  position: fixed;
+  height: 3em;
+  left: 0; right: 0;
+}
+
+.Screen > header {
+  top: 0;
+  background: linear-gradient(#FDF6E3, #FDF6E3, #FDF6E300);
+}
+
+.Screen > footer {
+  bottom: 0;
+  background: linear-gradient(#FDF6E300, #FDF6E3, #FDF6E3);
+}
+
+.Screen > header > h1 {
+  margin: 0;
+  font-size: 120%;
+}
+
+.Screen > main {
+  padding: 3em 0;
 }
 
 .OccurrenceList {
@@ -50,17 +74,16 @@ ol > li::before {
 }
 
 .RegisterButton {
-  position: fixed;
-  bottom: 0.5em;
+  position: absolute;
   right: 0.5em;
-  font-weight: bold;
-  font-size: 200%;
-  width: 3em;
-  height: 3em;
+  bottom: 0.25em;
+  width: 4em;
+  height: 2.5em;
   border: none;
-  border-radius: 1.5em;
-  background: #5A0BA0;
+  border-radius: 2em;
   color: #FFF;
+  background: #5A0BA0;
+  font-weight: bold;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
