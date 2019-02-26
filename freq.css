@@ -2,11 +2,33 @@ html, body {
   height: 100%;
   margin: 0; padding: 0;
   background: #FDF6E3;
-  color: #333;
+  color: rgba(0, 0, 0, 0.9);
 }
 
 body, button, input {
   font: normal 11pt/1.7 'Segoe UI',Avenir,sans-serif;
+}
+
+header > h1 {
+  margin: 0;
+}
+
+ol {
+  list-style: none;
+  counter-reset: li;
+}
+
+ol > li {
+  counter-increment: li;
+}
+
+ol > li::before {
+  content: counter(li) '.';
+  display: inline-block;
+  width: 3em;
+  text-align: right;
+  margin: 0 0.5em 0 -3.5em;
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .Screen {
@@ -14,11 +36,17 @@ body, button, input {
   max-width: 35em;
   margin: 0 auto;
   padding: 0 0.5em;
+  text-align: center;
 }
 
 .OccurrenceList {
-  list-style: none;
-  padding-inline-start: 0;
+  display: inline-block;
+  padding: 0;
+}
+
+.OccurrenceList:empty::before {
+  content: '(no occurrences)';
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .RegisterButton {
