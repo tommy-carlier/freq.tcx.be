@@ -20,26 +20,31 @@
     r.detach();
   }
 
-  const todayOccurrencesList = d.getElementById('todayOccurrences');
+  const dayOccurrencesList = d.getElementById('dayOccurrences');
 
-  async function displayTodayOccurrences() {
-    const type = getAttr(todayOccurrencesList, 'data-type'),
-          f = d.createDocumentFragment();
-    const min = new Date(); min.setHours(0, 0, 0, 0);
-    const max = new Date(); max.setHours(23, 59, 59, 999);
-    await data.getOccurrencesBetween(type, min, max, (dt, next) => {
-      f.appendChild(createOccurrenceItem(dt));
+  async function displayDayOccurrences(date) {
+    const type = getAttr(dayOccurrencesList, 'data-type'),
+          f = d.createDocumentFragment(),
+          y = date.getFullYear(),
+          m = date.getMonth(),
+          dt = date.getDate(),
+          min = new Date(y, m, dt),
+          max = new Date(y, m, dt, 23, 59, 59, 999);
+    
+    await data.getOccurrencesBetween(type, min, max, occ => {
+      f.appendChild(createOccurrenceItem(occ));
       return true;
     });
-    removeAllChildren(todayOccurrencesList);
-    todayOccurrencesList.appendChild(f);
+    
+    removeAllChildren(dayOccurrencesList);
+    dayOccurrencesList.appendChild(f);
   }
 
   async function registerOccurrence(type, btn) {
     btn.disabled = true;
     try {
       var dt = await data.registerOccurrence(type);
-      if(dt) todayOccurrencesList.appendChild(createOccurrenceItem(dt));
+      if(dt) dayOccurrencesList.appendChild(createOccurrenceItem(dt));
     } finally {
       btn.disabled = false;
     }
@@ -60,5 +65,5 @@
     actions[action](type, t);
   });
 
-  displayTodayOccurrences();
+  displayDayOccurrences(new Date());
 }(document));
