@@ -48,6 +48,7 @@ ol > li::before {
   position: fixed;
   left: 0; right: 0;
   height: 3rem;
+  white-space: nowrap;
 }
 
 .Screen > header {
@@ -78,12 +79,12 @@ ol > li::before {
 }
 
 .NavToPrev::before {
-  content: '⏴︎';
+  content: '⯇︎';
   margin-right: 0.3rem;
 }
 
 .NavToNext::after {
-  content: '⏵︎';
+  content: '⯈︎';
   margin-left: 0.3rem;
 }
 

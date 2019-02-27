@@ -33,7 +33,7 @@ function nextDate(dt) {
   return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1);
 }
 
-const DATE_FORMAT_TITLE = { weekday:'short', month:'long', day:'numeric', year:'numeric' };
+const DATE_FORMAT_TITLE = { month:'short', day:'numeric', year:'numeric' };
 const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
 
 function formatDate(dt, fmt) {
