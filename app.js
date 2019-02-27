@@ -45,9 +45,10 @@ const
   dayTitleHeader = document.getElementById('dayTitle'),
   prevDayButton = document.getElementById('prevDay'),
   nextDayButton = document.getElementById('nextDay');
-var currentDay = new Date();
+var currentDay = new Date(), isToday = true;
 
-async function displayDayOccurrences() {
+async function displayDayOccurrences(dt) {
+  currentDay = dt;
   dayTitleHeader.textContent = formatDate(currentDay, DATE_FORMAT_TITLE);
   prevDayButton.textContent = formatDate(prevDate(currentDay), DATE_FORMAT_NAV);
   nextDayButton.textContent = formatDate(nextDate(currentDay), DATE_FORMAT_NAV);
@@ -56,13 +57,15 @@ async function displayDayOccurrences() {
         f = document.createDocumentFragment(),
         y = currentDay.getFullYear(),
         m = currentDay.getMonth(),
-        dt = currentDay.getDate(),
-        min = new Date(y, m, dt),
-        max = new Date(y, m, dt, 23, 59, 59, 999);
+        d = currentDay.getDate(),
+        min = new Date(y, m, d),
+        max = new Date(y, m, d, 23, 59, 59, 999);
   
+  isToday = max >= new Date();
   const first = await data.getFirstOccurrence(type);
+
   prevDayButton.disabled = !(first && first < min);
-  nextDayButton.disabled = max >= new Date();
+  nextDayButton.disabled = isToday;
 
   await data.getOccurrencesBetween(type, min, max, occ => {
     f.appendChild(createOccurrenceItem(occ));
@@ -73,22 +76,22 @@ async function displayDayOccurrences() {
   dayOccurrencesList.appendChild(f);
 }
 
-async function registerOccurrence(type, btn) {
+async function registerOccurrence(type) {
   var dt = await data.registerOccurrence(type);
   if(dt) {
-    dayOccurrencesList.appendChild(createOccurrenceItem(dt));
+    if(isToday) dayOccurrencesList.appendChild(createOccurrenceItem(dt));
+    else await displayDayOccurrences(new Date());
+    
     scrollToBottom();
   }
 }
 
 async function navToPrevDay(type) {
-  currentDay = prevDate(currentDay);
-  await displayDayOccurrences();
+  await displayDayOccurrences(prevDate(currentDay));
 }
 
 async function navToNextDay(type) {
-  currentDay = nextDate(currentDay);
-  await displayDayOccurrences();
+  await displayDayOccurrences(nextDate(currentDay));
 }
 
 const actions = { registerOccurrence, navToPrevDay, navToNextDay };
@@ -106,7 +109,7 @@ document.addEventListener('click', async ev => {
   await actions[action](type);
 });
 
-displayDayOccurrences('Default');
+displayDayOccurrences(currentDay);
 
 applicationCache.addEventListener('updateready', ev => {
   location.reload();
