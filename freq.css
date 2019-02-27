@@ -6,8 +6,17 @@ html, body {
   scroll-behavior: smooth;
 }
 
-body, button, input {
-  font: normal 11pt/1.7 'Segoe UI',Avenir,sans-serif;
+body, h1, button, input {
+  font: normal 14pt/1.7 'Segoe UI',Avenir,sans-serif;
+}
+
+button {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  opacity: 0.3;
 }
 
 ol {
@@ -54,11 +63,28 @@ ol > li::before {
 .Screen > header > h1 {
   margin: 0;
   flex-grow: 1;
-  font-size: 120%;
+  font-weight: bold;
+  line-height: 3rem;
+}
+
+.Screen > header > button {
+  background: none;
+  border: none;
+  color: #914CCE;
 }
 
 .Screen > main {
   padding: 3rem 0;
+}
+
+.NavToPrev::before {
+  content: '⏴︎';
+  margin-right: 0.3rem;
+}
+
+.NavToNext::after {
+  content: '⏵︎';
+  margin-left: 0.3rem;
 }
 
 .Spacer {
@@ -83,10 +109,8 @@ ol > li::before {
   border-radius: 0.5rem;
   color: #FFF;
   background: linear-gradient(#C9B3DC 0%,#914CCE 5%,#4C038E 95%,#2B054C 100%);
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   font-weight: bold;
-  font-size: 130%;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .RegisterButton:active {

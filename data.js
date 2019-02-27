@@ -24,6 +24,14 @@ async function registerOccurrence(name) {
   return dt;
 }
 
+async function getFirstOccurrence(name) {
+  var db = await open(name);
+  var tx = db.transaction(OCC, RO);
+  var first = await DB.firstKey(tx.objectStore(OCC));
+  await DB.complete(tx);
+  return first;
+}
+
 async function getOccurrencesBetween(name, min, max, cb) {
   var db = await open(name);
   var tx = db.transaction(OCC, RO);
@@ -31,4 +39,4 @@ async function getOccurrencesBetween(name, min, max, cb) {
   await DB.complete(tx);
 }
 
-export default { registerOccurrence, getOccurrencesBetween };
+export default { registerOccurrence, getFirstOccurrence, getOccurrencesBetween };

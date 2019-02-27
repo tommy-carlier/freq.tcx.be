@@ -12,7 +12,9 @@
   <body>
     <div class=Screen data-type="Default">
       <header>
-        <h1>Today</h1>
+        <button id=prevDay class=NavToPrev data-action="navToPrevDay"></button>
+        <h1 id=dayTitle></h1>
+        <button id=nextDay class=NavToNext data-action="navToNextDay"></button>
       </header>
       <main>
         <ol id=dayOccurrences class=OccurrenceList></ol>

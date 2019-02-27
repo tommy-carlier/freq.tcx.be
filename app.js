@@ -25,17 +25,45 @@ function scrollToBottom() {
   scrollTo(0, document.body.scrollHeight);
 }
 
-const dayOccurrencesList = document.getElementById('dayOccurrences');
+function prevDate(dt) {
+  return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1);
+}
 
-async function displayDayOccurrences(date) {
+function nextDate(dt) {
+  return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1);
+}
+
+const DATE_FORMAT_TITLE = { weekday:'short', month:'long', day:'numeric', year:'numeric' };
+const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
+
+function formatDate(dt, fmt) {
+  return Intl.DateTimeFormat([], fmt).format(dt);
+}
+
+const
+  dayOccurrencesList = document.getElementById('dayOccurrences'),
+  dayTitleHeader = document.getElementById('dayTitle'),
+  prevDayButton = document.getElementById('prevDay'),
+  nextDayButton = document.getElementById('nextDay');
+var currentDay = new Date();
+
+async function displayDayOccurrences() {
+  dayTitleHeader.textContent = formatDate(currentDay, DATE_FORMAT_TITLE);
+  prevDayButton.textContent = formatDate(prevDate(currentDay), DATE_FORMAT_NAV);
+  nextDayButton.textContent = formatDate(nextDate(currentDay), DATE_FORMAT_NAV);
+
   const type = getAttr(dayOccurrencesList, 'data-type'),
         f = document.createDocumentFragment(),
-        y = date.getFullYear(),
-        m = date.getMonth(),
-        dt = date.getDate(),
+        y = currentDay.getFullYear(),
+        m = currentDay.getMonth(),
+        dt = currentDay.getDate(),
         min = new Date(y, m, dt),
         max = new Date(y, m, dt, 23, 59, 59, 999);
   
+  const first = await data.getFirstOccurrence(type);
+  prevDayButton.disabled = !(first && first < min);
+  nextDayButton.disabled = max >= new Date();
+
   await data.getOccurrencesBetween(type, min, max, occ => {
     f.appendChild(createOccurrenceItem(occ));
     return true;
@@ -46,21 +74,26 @@ async function displayDayOccurrences(date) {
 }
 
 async function registerOccurrence(type, btn) {
-  btn.disabled = true;
-  try {
-    var dt = await data.registerOccurrence(type);
-    if(dt) {
-      dayOccurrencesList.appendChild(createOccurrenceItem(dt));
-      scrollToBottom();
-    }
-  } finally {
-    btn.disabled = false;
+  var dt = await data.registerOccurrence(type);
+  if(dt) {
+    dayOccurrencesList.appendChild(createOccurrenceItem(dt));
+    scrollToBottom();
   }
 }
 
-const actions = { registerOccurrence };
+async function navToPrevDay(type) {
+  currentDay = prevDate(currentDay);
+  await displayDayOccurrences();
+}
 
-document.addEventListener('click', ev => {
+async function navToNextDay(type) {
+  currentDay = nextDate(currentDay);
+  await displayDayOccurrences();
+}
+
+const actions = { registerOccurrence, navToPrevDay, navToNextDay };
+
+document.addEventListener('click', async ev => {
   const t = ev.target;
   if(t.disabled) return;
 
@@ -70,10 +103,10 @@ document.addEventListener('click', ev => {
   const type = getAttr(t, 'data-type');
   if(!type) return;
 
-  actions[action](type, t);
+  await actions[action](type);
 });
 
-displayDayOccurrences(new Date());
+displayDayOccurrences('Default');
 
 applicationCache.addEventListener('updateready', ev => {
   location.reload();

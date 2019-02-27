@@ -16,6 +16,15 @@ function forEachKey(store, range, cb) {
   });
 }
 
+function firstKey(store) {
+  return new Promise(resolve => {
+    store.openKeyCursor().onsuccess = ev => {
+      const cursor = ev.target.result;
+      resolve(cursor && cursor.key);
+    };
+  });
+}
+
 function open(name, version, upgradeCB) {
   const req = indexedDB.open(name, version);
   req.onupgradeneeded = function() { upgradeCB(req.result) };
@@ -30,4 +39,4 @@ function complete(tx) {
   });
 }
 
-export default { reqPromise, open, complete, forEachKey };
+export default { reqPromise, open, complete, forEachKey, firstKey };
