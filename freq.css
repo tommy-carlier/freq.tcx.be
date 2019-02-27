@@ -79,12 +79,12 @@ ol > li::before {
 }
 
 .NavToPrev::before {
-  content: '⯇︎';
+  content: '‹';
   margin-right: 0.3rem;
 }
 
 .NavToNext::after {
-  content: '⯈︎';
+  content: '›';
   margin-left: 0.3rem;
 }
 
