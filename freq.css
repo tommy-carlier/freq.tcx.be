@@ -71,6 +71,7 @@ ol > li::before {
 .Screen > header > button {
   background: none;
   border: none;
+  padding: 0 0.5em;
   border-radius: 0;
   color: #914CCE;
 }
