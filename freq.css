@@ -73,6 +73,7 @@ ol > li::before {
   border: none;
   color: #914CCE;
   -webkit-appearance: none;
+  border-radius: 0;
 }
 
 .Screen > main {
