@@ -104,6 +104,10 @@ ol > li::before {
   color: rgba(0, 0, 0, 0.4);
 }
 
+.OccurrenceList.Added > li:last-child {
+  font-weight: bold;
+}
+
 .RegisterButton {
   width: 5rem;
   padding: 0;

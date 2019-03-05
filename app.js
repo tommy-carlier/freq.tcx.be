@@ -47,6 +47,11 @@ const
   nextDayButton = document.getElementById('nextDay');
 var currentDay = new Date(), isToday = true;
 
+function setOccurrencesListAdded(added) {
+  if(added) dayOccurrencesList.classList.add('Added');
+  else dayOccurrencesList.classList.remove('Added');
+}
+
 async function displayDayOccurrences(dt) {
   currentDay = dt;
   dayTitleHeader.textContent = formatDate(currentDay, DATE_FORMAT_TITLE);
@@ -82,15 +87,18 @@ async function registerOccurrence(type) {
     if(isToday) dayOccurrencesList.appendChild(createOccurrenceItem(dt));
     else await displayDayOccurrences(new Date());
     
+    setOccurrencesListAdded(true);
     scrollToBottom();
   }
 }
 
 async function navToPrevDay(type) {
+  setOccurrencesListAdded(false);
   await displayDayOccurrences(prevDate(currentDay));
 }
 
 async function navToNextDay(type) {
+  setOccurrencesListAdded(false);
   await displayDayOccurrences(nextDate(currentDay));
 }
 
@@ -110,6 +118,7 @@ document.addEventListener('click', async ev => {
 });
 
 displayDayOccurrences(currentDay);
+setOccurrencesListAdded(false);
 
 applicationCache.addEventListener('updateready', ev => {
   location.reload();
