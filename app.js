@@ -40,6 +40,22 @@ function formatDate(dt, fmt) {
   return Intl.DateTimeFormat([], fmt).format(dt);
 }
 
+function setClassIf(e, cls, add) {
+  if(add) e.classList.add(cls);
+  else e.classList.remove(cls);
+}
+
+function showScreen(id) {
+  const scr = document.getElementById(id);
+  if(!scr.classList.contains('Visible')) {
+    const es = document.getElementsByClassName('Screen');
+    for(var i = 0, n = es.length; i < n; i++) {
+      const e = es[i];
+      setClassIf(e, 'Visible', e == scr);
+    }
+  }
+}
+
 const
   dayOccurrencesList = document.getElementById('dayOccurrences'),
   dayTitleHeader = document.getElementById('dayTitle'),
@@ -48,8 +64,7 @@ const
 var currentDay = new Date(), isToday = true;
 
 function setOccurrencesListAdded(added) {
-  if(added) dayOccurrencesList.classList.add('Added');
-  else dayOccurrencesList.classList.remove('Added');
+  setClassIf(dayOccurrencesList, 'Added', added);
 }
 
 async function displayDayOccurrences(dt) {
@@ -117,8 +132,11 @@ document.addEventListener('click', async ev => {
   await actions[action](type);
 });
 
-displayDayOccurrences(currentDay);
-setOccurrencesListAdded(false);
+(async function() {
+  await displayDayOccurrences(currentDay);
+  showScreen('dayView');
+  setOccurrencesListAdded(false);
+}());
 
 applicationCache.addEventListener('updateready', ev => {
   location.reload();

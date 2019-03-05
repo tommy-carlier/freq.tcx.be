@@ -41,6 +41,11 @@ ol > li::before {
   box-sizing: border-box;
   padding: 0 0.5rem;
   text-align: center;
+  display: none;
+}
+
+.Screen.Visible {
+  display: block;
 }
 
 .Screen > header, .Screen > footer {
