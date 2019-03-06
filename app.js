@@ -8,8 +8,10 @@ function getAttr(e, name) {
   }
 };
 
-function createOccurrenceItem(dt) {
+function createOccurrenceItem(type, dt) {
   const li = document.createElement('LI');
+  li.setAttribute('data-action', 'editOccurrence');
+  li.setAttribute('data-target', type + '/' + dt.valueOf());
   li.textContent = dt.toLocaleTimeString();
   return li;
 }
@@ -60,7 +62,12 @@ const
   dayOccurrencesList = document.getElementById('dayOccurrences'),
   dayTitleHeader = document.getElementById('dayTitle'),
   prevDayButton = document.getElementById('prevDay'),
-  nextDayButton = document.getElementById('nextDay');
+  nextDayButton = document.getElementById('nextDay'),
+  
+  editOccurrenceView = document.getElementById('editOccurrenceView'),
+  editOccurrenceDate = document.getElementById('editOccurrenceDate'),
+  editOccurrenceTime = document.getElementById('editOccurrenceTime');
+
 var currentDay = new Date(), isToday = true;
 
 function setOccurrencesListAdded(added) {
@@ -73,7 +80,7 @@ async function displayDayOccurrences(dt) {
   prevDayButton.textContent = formatDate(prevDate(currentDay), DATE_FORMAT_NAV);
   nextDayButton.textContent = formatDate(nextDate(currentDay), DATE_FORMAT_NAV);
 
-  const type = getAttr(dayOccurrencesList, 'data-type'),
+  const type = getAttr(dayOccurrencesList, 'data-target'),
         f = document.createDocumentFragment(),
         y = currentDay.getFullYear(),
         m = currentDay.getMonth(),
@@ -88,7 +95,7 @@ async function displayDayOccurrences(dt) {
   nextDayButton.disabled = isToday;
 
   await data.getOccurrencesBetween(type, min, max, occ => {
-    f.appendChild(createOccurrenceItem(occ));
+    f.appendChild(createOccurrenceItem(type, occ));
     return true;
   });
   
@@ -99,7 +106,7 @@ async function displayDayOccurrences(dt) {
 async function registerOccurrence(type) {
   var dt = await data.registerOccurrence(type);
   if(dt) {
-    if(isToday) dayOccurrencesList.appendChild(createOccurrenceItem(dt));
+    if(isToday) dayOccurrencesList.appendChild(createOccurrenceItem(type, dt));
     else await displayDayOccurrences(new Date());
     
     setOccurrencesListAdded(true);
@@ -107,17 +114,44 @@ async function registerOccurrence(type) {
   }
 }
 
-async function navToPrevDay(type) {
+async function navToPrevDay() {
   setOccurrencesListAdded(false);
   await displayDayOccurrences(prevDate(currentDay));
 }
 
-async function navToNextDay(type) {
+async function navToNextDay() {
   setOccurrencesListAdded(false);
   await displayDayOccurrences(nextDate(currentDay));
 }
 
-const actions = { registerOccurrence, navToPrevDay, navToNextDay };
+const regexSplitEditTarget = /^(.+)\/(.+)$/;
+
+var editingDate;
+
+async function editOccurrence(target) {
+  const match = regexSplitEditTarget.exec(target);
+  if(match) {
+    const type = match[1];
+    editingDate = new Date(parseInt(match[2], 10));
+    editOccurrenceDate.valueAsDate = editingDate;
+    editOccurrenceTime.value = editingDate.toLocaleTimeString();
+    editOccurrenceView.setAttribute('data-target', type);
+    showScreen('editOccurrenceView');
+  }
+}
+
+async function cancelEdit() {
+  showScreen('dayView');
+}
+
+async function saveEdit(type) {
+  const newDate = new Date(editOccurrenceDate.value + ' ' + editOccurrenceTime.value);
+  await data.modifyOccurrence(type, editingDate, newDate);
+  await displayDayOccurrences(newDate);
+  showScreen('dayView');
+}
+
+const actions = { registerOccurrence, navToPrevDay, navToNextDay, editOccurrence, cancelEdit, saveEdit };
 
 document.addEventListener('click', async ev => {
   const t = ev.target;
@@ -126,10 +160,11 @@ document.addEventListener('click', async ev => {
   const action = getAttr(t, 'data-action');
   if(!action) return;
 
-  const type = getAttr(t, 'data-type');
-  if(!type) return;
-
-  await actions[action](type);
+  try {
+    await actions[action](getAttr(t, 'data-target'));
+  } catch(ex) {
+    if(ex) alert(ex.message);
+  }
 });
 
 (async function() {

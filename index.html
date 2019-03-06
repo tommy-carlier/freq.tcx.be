@@ -10,20 +10,33 @@
     <link rel="apple-touch-icon-precomposed" href="freq.png">
   </head>
   <body>
-    <div class=Screen id=dayView data-type="Default">
+    <div class=Screen id=dayView data-target=Default>
       <header>
-        <button id=prevDay class=NavToPrev data-action="navToPrevDay"></button>
+        <button id=prevDay class=NavToPrev data-action=navToPrevDay></button>
         <h1 id=dayTitle></h1>
-        <button id=nextDay class=NavToNext data-action="navToNextDay"></button>
+        <button id=nextDay class=NavToNext data-action=navToNextDay></button>
       </header>
       <main>
         <ol id=dayOccurrences class=OccurrenceList></ol>
       </main>
       <footer>
-        <div class=Spacer></div>
-        <button data-action="registerOccurrence" class=RegisterButton>+1</button>
+        <div class=Grow></div>
+        <button data-action=registerOccurrence class=RegisterButton>+1</button>
       </footer>
     </div>
+
+    <div class=Screen id=editOccurrenceView data-target=Default>
+      <header>
+        <button data-action=cancelEdit>Cancel</button>
+        <h1 id=editOccurrenceTitle></h1>
+        <button data-action=saveEdit>Save</button>
+      </header>
+      <main>
+        <input id=editOccurrenceDate type=date>
+        <input id=editOccurrenceTime type=time>
+      </main>
+    </div>
+
     <script type=module src="app.js"></script>
   </body>
 </html>

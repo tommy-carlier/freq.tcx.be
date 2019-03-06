@@ -95,7 +95,7 @@ ol > li::before {
   margin-left: 0.3rem;
 }
 
-.Spacer {
+.Grow {
   flex-grow: 1;
 }
 
