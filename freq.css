@@ -73,7 +73,7 @@ ol > li::before {
   line-height: 3rem;
 }
 
-.Screen > header > button {
+.Screen > header > button:not(.PrimaryButton) {
   background: none;
   border: none;
   color: #914CCE;
@@ -113,15 +113,15 @@ ol > li::before {
   font-weight: bold;
 }
 
-.RegisterButton {
-  width: 5rem;
-  padding: 0;
+.PrimaryButton {
+  padding: 0 1rem;
   margin: 0.25rem;
   border: solid 1px #390965;
   border-radius: 0.5rem;
   color: #FFF;
   background: linear-gradient(#C9B3DC 0%,#914CCE 5%,#4C038E 95%,#2B054C 100%);
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-shadow: -1px -1px 0 #000,0 -1px 0 #000,1px -1px 0 #000,1px 0 0 #000,1px 1px 0 #000,0 1px 0 #000,-1px  1px 0 #000,-1px 0 0 #000;
+  -webkit-appearance: none;
   font-weight: bold;
 }
 
