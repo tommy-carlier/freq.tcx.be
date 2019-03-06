@@ -125,7 +125,8 @@ ol > li::before {
   font-weight: bold;
 }
 
-.RegisterButton:active {
+.PrimaryButton:active {
   background: linear-gradient(#2B054C 0%,#4C038E 5%,#914CCE 95%,#C9B3DC 100%);
-  padding: 0.2rem 0 0 0;
+  padding: 0.2rem 1rem 0;
+  color: #DDC8F0;
 }
