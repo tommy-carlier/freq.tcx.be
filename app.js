@@ -146,6 +146,7 @@ async function cancelEdit() {
 
 async function saveEdit(type) {
   const newDate = new Date(editOccurrenceDate.value + ' ' + editOccurrenceTime.value);
+  alert(newDate.toString());
   await data.modifyOccurrence(type, editingDate, newDate);
   await displayDayOccurrences(newDate);
   showScreen('dayView');
