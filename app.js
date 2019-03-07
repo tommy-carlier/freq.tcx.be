@@ -148,13 +148,12 @@ async function cancelEdit() {
   showScreen('dayView');
 }
 
-const regexParseDateTime = /^([0-9]+)-([0-9]+)-([0-9]+)T([0-9]+):([0-9]+):([0-9]+)$/;
+const regexParseDateTime = /^([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+)/;
 function parseDateTime(d, t) {
-  alert(d + 'T' + t);
-  const match = regexParseDateTime.exec(d + 'T' + t);
+  const match = regexParseDateTime.exec(d + ' ' + t);
   if(match) return new Date(
     parseInt10(match[1]), parseInt10(match[2])-1, parseInt10(match[3]),
-    parseInt10(match[4]), parseInt10(match[5]), parseInt10(match[6]));
+    parseInt10(match[4]), parseInt10(match[5]));
 }
 
 async function saveEdit(type) {
