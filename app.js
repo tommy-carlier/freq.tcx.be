@@ -35,6 +35,10 @@ function nextDate(dt) {
   return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1);
 }
 
+function parseInt10(s) {
+  return parseInt(s, 10);
+}
+
 const DATE_FORMAT_TITLE = { month:'short', day:'numeric', year:'numeric' };
 const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
 
@@ -132,7 +136,7 @@ async function editOccurrence(target) {
   const match = regexSplitEditTarget.exec(target);
   if(match) {
     const type = match[1];
-    editingDate = new Date(parseInt(match[2], 10));
+    editingDate = new Date(parseInt10(match[2]));
     editOccurrenceDate.valueAsDate = editingDate;
     editOccurrenceTime.value = editingDate.toLocaleTimeString();
     editOccurrenceView.setAttribute('data-target', type);
@@ -144,8 +148,16 @@ async function cancelEdit() {
   showScreen('dayView');
 }
 
+const regexParseDateTime = /^([0-9]+)-([0-9]+)-([0-9]+)T([0-9]+):([0-9]+):([0-9]+)$/;
+function parseDateTime(d, t) {
+  const match = regexParseDateTime.exec(d + 'T' + t);
+  if(match) return new Date(
+    parseInt10(match[1]), parseInt10(match[2])-1, parseInt10(match[3]),
+    parseInt10(match[4]), parseInt10(match[5]), parseInt10(match[6]));
+}
+
 async function saveEdit(type) {
-  const newDate = new Date(editOccurrenceDate.value + 'T' + editOccurrenceTime.value);
+  const newDate = parseDateTime(editOccurrenceDate.value, editOccurrenceTime.value);
   await data.modifyOccurrence(type, editingDate, newDate);
   await displayDayOccurrences(newDate);
   showScreen('dayView');
