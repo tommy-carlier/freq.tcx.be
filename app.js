@@ -148,7 +148,7 @@ async function cancelEdit() {
   showScreen('dayView');
 }
 
-const regexParseDateTime = /^([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+)/;
+const regexParseDateTime = /^([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+)/;
 function parseDateTime(d, t) {
   const match = regexParseDateTime.exec(d + ' ' + t);
   if(match) return new Date(
