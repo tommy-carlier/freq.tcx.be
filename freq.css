@@ -109,6 +109,10 @@ ol > li::before {
   color: rgba(0, 0, 0, 0.4);
 }
 
+.OccurrenceList > li {
+  cursor: pointer; /* this is necessary for iOS to bubble the click-event: see http://gravitydept.com/blog/js-click-event-bubbling-on-ios */
+}
+
 .OccurrenceList.Added > li:last-child {
   font-weight: bold;
 }
