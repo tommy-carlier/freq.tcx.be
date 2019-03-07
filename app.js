@@ -150,6 +150,7 @@ async function cancelEdit() {
 
 const regexParseDateTime = /^([0-9]+)-([0-9]+)-([0-9]+)T([0-9]+):([0-9]+):([0-9]+)$/;
 function parseDateTime(d, t) {
+  alert(d + 'T' + t);
   const match = regexParseDateTime.exec(d + 'T' + t);
   if(match) return new Date(
     parseInt10(match[1]), parseInt10(match[2])-1, parseInt10(match[3]),
