@@ -49,7 +49,6 @@ async function modifyOccurrence(name, oldDate, newDate) {
 
   try {
     await DB.reqPromise(store.delete(oldDate));
-    await DB.reqPromise(store.delete(newDate));
     await DB.reqPromise(store.add(null, newDate));
   } catch(ex) {
     if(ex.name != 'ConstraintError') throw ex;
