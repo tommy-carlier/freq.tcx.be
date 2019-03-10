@@ -1,4 +1,7 @@
 import data from './data.js';
+import time from './time.js';
+
+var currentDay = new Date(), editingDate;
 
 function getAttr(e, name) {
   while(e) {
@@ -11,8 +14,8 @@ function getAttr(e, name) {
 function createOccurrenceItem(type, dt) {
   const li = document.createElement('LI');
   li.setAttribute('data-action', 'editOccurrence');
-  li.setAttribute('data-target', type + '/' + dt.valueOf());
-  li.textContent = dt.toLocaleTimeString();
+  li.setAttribute('data-target', time.formatOccurrenceTarget(type, dt));
+  li.textContent = time.formatTimeOccurrence(dt);
   return li;
 }
 
@@ -25,37 +28,6 @@ function removeAllChildren(e) {
 
 function scrollToBottom() {
   scrollTo(0, document.body.scrollHeight);
-}
-
-function prevDate(dt) {
-  return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1);
-}
-
-function nextDate(dt) {
-  return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1);
-}
-
-function parseInt10(s) {
-  return parseInt(s, 10);
-}
-
-function formatTimeComponent(c) {
-  return c < 10 ? '0' + c : c;
-}
-
-function formatDateIso(d) {
-  return d.getFullYear() + '-' + formatTimeComponent(d.getMonth()+1) + '-' + formatTimeComponent(d.getDate());
-}
-
-function formatTimeIso(t) {
-  return t.getHours() + ':' + formatTimeComponent(t.getMinutes()) + ':' + formatTimeComponent(t.getSeconds());
-}
-
-const DATE_FORMAT_TITLE = { month:'short', day:'numeric', year:'numeric' };
-const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
-
-function formatDate(dt, fmt) {
-  return Intl.DateTimeFormat([], fmt).format(dt);
 }
 
 function setClassIf(e, cls, add) {
@@ -84,33 +56,27 @@ const
   editOccurrenceDate = document.getElementById('editOccurrenceDate'),
   editOccurrenceTime = document.getElementById('editOccurrenceTime');
 
-var currentDay = new Date(), isToday = true;
-
 function setOccurrencesListAdded(added) {
   setClassIf(dayOccurrencesList, 'Added', added);
 }
 
 async function displayDayOccurrences(dt) {
   currentDay = dt;
-  dayTitleHeader.textContent = formatDate(currentDay, DATE_FORMAT_TITLE);
-  prevDayButton.textContent = formatDate(prevDate(currentDay), DATE_FORMAT_NAV);
-  nextDayButton.textContent = formatDate(nextDate(currentDay), DATE_FORMAT_NAV);
+  dayTitleHeader.textContent = time.formatDateTitle(currentDay);
+  prevDayButton.textContent = time.formatDateNav(time.prevDate(currentDay));
+  nextDayButton.textContent = time.formatDateNav(time.nextDate(currentDay));
 
   const type = getAttr(dayOccurrencesList, 'data-target'),
         f = document.createDocumentFragment(),
-        y = currentDay.getFullYear(),
-        m = currentDay.getMonth(),
-        d = currentDay.getDate(),
-        min = new Date(y, m, d),
-        max = new Date(y, m, d, 23, 59, 59, 999);
+        start = time.startOfDay(currentDay),
+        end = time.endOfDay(currentDay);
   
-  isToday = max >= new Date();
   const first = await data.getFirstOccurrence(type);
 
-  prevDayButton.disabled = !(first && first < min);
-  nextDayButton.disabled = isToday;
+  prevDayButton.disabled = !(first && first < start);
+  nextDayButton.disabled = time.isToday(dt);
 
-  await data.getOccurrencesBetween(type, min, max, occ => {
+  await data.getOccurrencesBetween(type, start, end, occ => {
     f.appendChild(createOccurrenceItem(type, occ));
     return true;
   });
@@ -122,8 +88,9 @@ async function displayDayOccurrences(dt) {
 async function registerOccurrence(type) {
   var dt = await data.registerOccurrence(type);
   if(dt) {
-    if(isToday) dayOccurrencesList.appendChild(createOccurrenceItem(type, dt));
-    else await displayDayOccurrences(new Date());
+    if(time.isToday(dt)) {
+      dayOccurrencesList.appendChild(createOccurrenceItem(type, dt));
+    } else await displayDayOccurrences(new Date());
     
     setOccurrencesListAdded(true);
     scrollToBottom();
@@ -132,26 +99,21 @@ async function registerOccurrence(type) {
 
 async function navToPrevDay() {
   setOccurrencesListAdded(false);
-  await displayDayOccurrences(prevDate(currentDay));
+  await displayDayOccurrences(time.prevDate(currentDay));
 }
 
 async function navToNextDay() {
   setOccurrencesListAdded(false);
-  await displayDayOccurrences(nextDate(currentDay));
+  await displayDayOccurrences(time.nextDate(currentDay));
 }
 
-const regexSplitEditTarget = /^(.+)\/(.+)$/;
-
-var editingDate;
-
 async function editOccurrence(target) {
-  const match = regexSplitEditTarget.exec(target);
-  if(match) {
-    const type = match[1];
-    editingDate = new Date(parseInt10(match[2]));
-    editOccurrenceDate.value = formatDateIso(editingDate);
-    editOccurrenceTime.value = formatTimeIso(editingDate);
-    editOccurrenceView.setAttribute('data-target', type);
+  target = time.parseOccurrenceTarget(target);
+  if(target) {
+    editingDate = target.dateTime;
+    editOccurrenceDate.value = time.formatDateIso(editingDate);
+    editOccurrenceTime.value = time.formatTimeIso(editingDate);
+    editOccurrenceView.setAttribute('data-target', target.type);
     showScreen('editOccurrenceView');
   }
 }
@@ -160,16 +122,8 @@ async function cancelEdit() {
   showScreen('dayView');
 }
 
-const regexParseDateTime = /^([0-9]+)-([0-9]+)-([0-9]+) ([0-9]+):([0-9]+)/;
-function parseDateTime(d, t) {
-  const match = regexParseDateTime.exec(d + ' ' + t);
-  if(match) return new Date(
-    parseInt10(match[1]), parseInt10(match[2])-1, parseInt10(match[3]),
-    parseInt10(match[4]), parseInt10(match[5]));
-}
-
 async function saveEdit(type) {
-  const newDate = parseDateTime(editOccurrenceDate.value, editOccurrenceTime.value);
+  const newDate = time.parseDateTime(editOccurrenceDate.value, editOccurrenceTime.value);
   await data.modifyOccurrence(type, editingDate, newDate);
   await displayDayOccurrences(newDate);
   showScreen('dayView');
