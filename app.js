@@ -39,6 +39,18 @@ function parseInt10(s) {
   return parseInt(s, 10);
 }
 
+function formatTimeComponent(c) {
+  return c < 10 ? '0' + c : c;
+}
+
+function formatDateIso(d) {
+  return d.getFullYear() + '-' + formatTimeComponent(d.getMonth()+1) + '-' + formatTimeComponent(d.getDate());
+}
+
+function formatTimeIso(t) {
+  return t.getHours() + ':' + formatTimeComponent(t.getMinutes()) + ':' + formatTimeComponent(t.getSeconds());
+}
+
 const DATE_FORMAT_TITLE = { month:'short', day:'numeric', year:'numeric' };
 const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
 
@@ -137,8 +149,8 @@ async function editOccurrence(target) {
   if(match) {
     const type = match[1];
     editingDate = new Date(parseInt10(match[2]));
-    editOccurrenceDate.valueAsDate = editingDate;
-    editOccurrenceTime.value = editingDate.toLocaleTimeString();
+    editOccurrenceDate.value = formatDateIso(editingDate);
+    editOccurrenceTime.value = formatTimeIso(editingDate);
     editOccurrenceView.setAttribute('data-target', type);
     showScreen('editOccurrenceView');
   }
