@@ -88,7 +88,7 @@ async function displayDayOccurrences(dt) {
 async function registerOccurrence(type) {
   var dt = await data.registerOccurrence(type);
   if(dt) {
-    if(time.isToday(dt)) {
+    if(time.isToday(currentDay)) {
       dayOccurrencesList.appendChild(createOccurrenceItem(type, dt));
     } else await displayDayOccurrences(new Date());
     
@@ -125,6 +125,8 @@ async function cancelEdit() {
 async function saveEdit(type) {
   const newDate = time.parseDateTime(editOccurrenceDate.value, editOccurrenceTime.value);
   await data.modifyOccurrence(type, editingDate, newDate);
+  
+  setOccurrencesListAdded(false);
   await displayDayOccurrences(newDate);
   showScreen('dayView');
 }
