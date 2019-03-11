@@ -34,7 +34,7 @@ return d.getFullYear() + '-' + formatTimeComponent(d.getMonth()+1) + '-' + forma
 }
 
 function formatTimeIso(t) {
-return t.getHours() + ':' + formatTimeComponent(t.getMinutes()) + ':' + formatTimeComponent(t.getSeconds());
+return formatTimeComponent(t.getHours()) + ':' + formatTimeComponent(t.getMinutes()) + ':' + formatTimeComponent(t.getSeconds());
 }
 
 const DATE_FORMAT_TITLE = { month:'short', day:'numeric', year:'numeric' };
