@@ -29,8 +29,7 @@ function setClassIf(e, cls, add) {
   else e.classList.remove(cls);
 }
 
-function showScreen(id) {
-  const scr = document.getElementById(id);
+function showScreen(scr) {
   if(!scr.classList.contains('Visible')) {
     const es = document.getElementsByClassName('Screen');
     for(var i = 0, n = es.length; i < n; i++) {

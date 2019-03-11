@@ -18,7 +18,7 @@ function showScreen(target) {
     editOccurrenceDate.value = time.formatDateIso(editingDate);
     editOccurrenceTime.value = time.formatTimeIso(editingDate);
     editOccurrenceView.dataset.target = target.type;
-    ui.showScreen('editOccurrenceView');
+    ui.showScreen(editOccurrenceView);
   }
 }
 

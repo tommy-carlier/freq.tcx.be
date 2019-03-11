@@ -6,6 +6,7 @@ import actions from './actions.js';
 var currentDay;
 
 const
+  dayView = ui.fromID('dayView'),
   dayOccurrencesList = ui.fromID('dayOccurrences'),
   dayTitleHeader = ui.fromID('dayTitle'),
   prevDayButton = ui.fromID('prevDay'),
@@ -72,7 +73,7 @@ async function navToNextDay() {
 
 async function navToCurrentDay() {
   setOccurrencesListAdded(false);
-  ui.showScreen('dayView');
+  ui.showScreen(dayView);
 }
 
 async function navToDay(dt) {
