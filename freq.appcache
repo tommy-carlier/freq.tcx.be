@@ -11,5 +11,9 @@ CACHE:
 /main.js
 /data.js
 /db.js
+/ui.js
+/actions.js
 /time.js
-/stats.js
+/dayView.js
+/editView.js
+/statsView.js
