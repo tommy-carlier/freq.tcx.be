@@ -3,18 +3,21 @@ import time from './time.js';
 
 var currentDay = new Date(), editingDate;
 
-function getAttr(e, name) {
+function fromDataSet(e, name) {
   while(e) {
-    var attr = e.getAttribute(name);
+    var attr = e.dataset[name];
     if(attr) return attr;
     e = e.parentElement;
   }
 };
 
+function getTarget(e) { return fromDataSet(e, 'target'); }
+function getAction(e) { return fromDataSet(e, 'action'); }
+
 function createOccurrenceItem(type, dt) {
   const li = document.createElement('LI');
-  li.setAttribute('data-action', 'editOccurrence');
-  li.setAttribute('data-target', time.formatOccurrenceTarget(type, dt));
+  li.dataset.action = 'editOccurrence';
+  li.dataset.target = time.formatOccurrenceTarget(type, dt);
   li.textContent = time.formatTimeOccurrence(dt);
   return li;
 }
@@ -66,7 +69,7 @@ async function displayDayOccurrences(dt) {
   prevDayButton.textContent = time.formatDateNav(time.prevDate(currentDay));
   nextDayButton.textContent = time.formatDateNav(time.nextDate(currentDay));
 
-  const type = getAttr(dayOccurrencesList, 'data-target'),
+  const type = getTarget(dayOccurrencesList),
         f = document.createDocumentFragment(),
         start = time.startOfDay(currentDay),
         end = time.endOfDay(currentDay);
@@ -113,7 +116,7 @@ async function editOccurrence(target) {
     editingDate = target.dateTime;
     editOccurrenceDate.value = time.formatDateIso(editingDate);
     editOccurrenceTime.value = time.formatTimeIso(editingDate);
-    editOccurrenceView.setAttribute('data-target', target.type);
+    editOccurrenceView.dataset.target = target.type;
     showScreen('editOccurrenceView');
   }
 }
@@ -137,11 +140,11 @@ document.addEventListener('click', async ev => {
   const t = ev.target;
   if(t.disabled) return;
 
-  const action = getAttr(t, 'data-action');
+  const action = getAction(t);
   if(!action) return;
 
   try {
-    await actions[action](getAttr(t, 'data-target'));
+    await actions[action](getTarget(t));
   } catch(ex) {
     if(ex) alert(ex.message);
   }
