@@ -39,18 +39,18 @@ ol > li::before {
   color: rgba(0, 0, 0, 0.4);
 }
 
-.Screen {
+.View {
   box-sizing: border-box;
   padding: 0 0.5rem;
   text-align: center;
   display: none;
 }
 
-.Screen.Visible {
+.View.Visible {
   display: block;
 }
 
-.Screen > header, .Screen > footer {
+.View > header, .View > footer {
   display: flex;
   position: fixed;
   left: 0; right: 0;
@@ -58,17 +58,17 @@ ol > li::before {
   white-space: nowrap;
 }
 
-.Screen > header {
+.View > header {
   top: 0;
   background: linear-gradient(#FDF6E3, #FDF6E3, #FDF6E300);
 }
 
-.Screen > footer {
+.View > footer {
   bottom: 0;
   background: linear-gradient(#FDF6E300, #FDF6E3, #FDF6E3);
 }
 
-.Screen > header > h1 {
+.View > header > h1 {
   margin: 0;
   flex-grow: 1;
   font-weight: bold;
@@ -85,7 +85,7 @@ button:not(.PrimaryButton) {
   -webkit-appearance: none;
 }
 
-.Screen > main {
+.View > main {
   padding: 3rem 0;
 }
 

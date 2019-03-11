@@ -29,9 +29,9 @@ function setClassIf(e, cls, add) {
   else e.classList.remove(cls);
 }
 
-function showScreen(scr) {
+function navToView(scr) {
   if(!scr.classList.contains('Visible')) {
-    const es = document.getElementsByClassName('Screen');
+    const es = document.getElementsByClassName('View');
     for(var i = 0, n = es.length; i < n; i++) {
       const e = es[i];
       setClassIf(e, 'Visible', e == scr);
@@ -39,4 +39,4 @@ function showScreen(scr) {
   }
 }
 
-export default { fromID, getTarget, getAction, removeAllChildren, scrollToBottom, setClassIf, showScreen };
+export default { fromID, getTarget, getAction, removeAllChildren, scrollToBottom, setClassIf, navToView };

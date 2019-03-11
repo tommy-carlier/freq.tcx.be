@@ -11,14 +11,14 @@ const
   editOccurrenceDate = ui.fromID('editOccurrenceDate'),
   editOccurrenceTime = ui.fromID('editOccurrenceTime');
 
-function showScreen(target) {
+function navToView(target) {
   target = time.parseOccurrenceTarget(target);
   if(target) {
     editingDate = target.dateTime;
     editOccurrenceDate.value = time.formatDateIso(editingDate);
     editOccurrenceTime.value = time.formatTimeIso(editingDate);
     editOccurrenceView.dataset.target = target.type;
-    ui.showScreen(editOccurrenceView);
+    ui.navToView(editOccurrenceView);
   }
 }
 
@@ -30,4 +30,4 @@ async function saveEdit(type) {
 
 actions.register(saveEdit);
 
-export { showScreen };
+export { navToView };

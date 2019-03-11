@@ -2,8 +2,8 @@ import ui from './ui.js';
 
 const statsView = ui.fromID('statsView');
 
-function showScreen() {
-  ui.showScreen(statsView);
+function navToView() {
+  ui.navToView(statsView);
 }
 
-export { showScreen };
+export { navToView };

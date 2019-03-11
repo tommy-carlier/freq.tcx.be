@@ -73,7 +73,7 @@ async function navToNextDay() {
 
 async function navToCurrentDay() {
   setOccurrencesListAdded(false);
-  ui.showScreen(dayView);
+  ui.navToView(dayView);
 }
 
 async function navToDay(dt) {
@@ -82,11 +82,11 @@ async function navToDay(dt) {
 }
 
 async function navToStats() {
-  (await import('./statsView.js')).showScreen();
+  (await import('./statsView.js')).navToView();
 }
 
 async function editOccurrence(target) {
-  (await import('./editView.js')).showScreen(target);
+  (await import('./editView.js')).navToView(target);
 }
 
 actions.register(navToPrevDay, navToNextDay, navToCurrentDay, navToStats, registerOccurrence, editOccurrence);
