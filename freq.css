@@ -11,7 +11,7 @@ body, h1, button, input {
   font: normal 14pt/1.7 'Segoe UI',Avenir,sans-serif;
 }
 
-button, a {
+button {
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -75,7 +75,7 @@ ol > li::before {
   line-height: 3rem;
 }
 
-a, button:not(.PrimaryButton) {
+button:not(.PrimaryButton) {
   display: inline-block;
   background: none;
   padding: 0 0.5em;
@@ -83,7 +83,6 @@ a, button:not(.PrimaryButton) {
   color: #914CCE;
   border-radius: 0;
   -webkit-appearance: none;
-  text-decoration: none;
 }
 
 .Screen > main {

@@ -110,6 +110,16 @@ async function navToNextDay() {
   await displayDayOccurrences(time.nextDate(currentDay));
 }
 
+async function navToDay() {
+  showScreen('dayView');
+}
+
+async function navToStats() {
+  showScreen('statsView');
+  const stats = await import('./stats.js');
+  stats.init();
+}
+
 async function editOccurrence(target) {
   target = time.parseOccurrenceTarget(target);
   if(target) {
@@ -122,7 +132,7 @@ async function editOccurrence(target) {
 }
 
 async function cancelEdit() {
-  showScreen('dayView');
+  await navToDay();
 }
 
 async function saveEdit(type) {
@@ -131,10 +141,13 @@ async function saveEdit(type) {
   
   setOccurrencesListAdded(false);
   await displayDayOccurrences(newDate);
-  showScreen('dayView');
+  await navToDay();
 }
 
-const actions = { registerOccurrence, navToPrevDay, navToNextDay, editOccurrence, cancelEdit, saveEdit };
+const actions = {
+  navToPrevDay, navToNextDay, navToDay, navToStats,
+  registerOccurrence, editOccurrence, cancelEdit, saveEdit
+};
 
 document.addEventListener('click', async ev => {
   const t = ev.target;

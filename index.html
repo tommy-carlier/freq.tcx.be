@@ -9,8 +9,8 @@
     <link rel=canonical href="https://freq.tcx.be/">
     <link rel="apple-touch-icon-precomposed" href="freq.png">
   </head>
-  <body>
-    <div class=Screen id=dayView data-target=Default>
+  <body data-target=Default>
+    <div class=Screen id=dayView>
       <header>
         <button id=prevDay class=NavToPrev data-action=navToPrevDay></button>
         <h1 id=dayTitle></h1>
@@ -20,13 +20,13 @@
         <ol id=dayOccurrences class=OccurrenceList></ol>
       </main>
       <footer>
-        <a href="stats.html">Stats</a>
+        <button data-action=navToStats>Stats</button>
         <div class=Grow></div>
         <button data-action=registerOccurrence class=PrimaryButton>+1</button>
       </footer>
     </div>
 
-    <div class=Screen id=editOccurrenceView data-target=Default>
+    <div class=Screen id=editOccurrenceView>
       <header>
         <button data-action=cancelEdit>Cancel</button>
         <h1 id=editOccurrenceTitle></h1>
@@ -36,6 +36,18 @@
         <input id=editOccurrenceDate type=date>
         <input id=editOccurrenceTime type=time>
       </main>
+    </div>
+
+    <div class=Screen id=statsView>
+      <header>
+        <h1>Statistics</h1>
+      </header>
+      <main>
+      </main>
+      <footer>
+        <button data-action=navToDay>Back</button>
+        <div class=Grow></div>
+      </footer>
     </div>
 
     <script type=module src="app.js"></script>
