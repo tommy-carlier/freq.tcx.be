@@ -81,8 +81,8 @@ async function navToDay(dt) {
   await navToCurrentDay();
 }
 
-async function navToStats() {
-  (await import('./statsView.js')).navToView();
+async function navToStats(target) {
+  (await import('./statsView.js')).navToView(target);
 }
 
 async function editOccurrence(target) {

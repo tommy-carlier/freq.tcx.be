@@ -1,13 +1,17 @@
 function parseInt10(s) {
     return parseInt(s, 10);
 }
+
+function addDays(dt, days) {
+    return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + days);
+}
   
 function prevDate(dt) {
-    return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - 1);
+    return addDays(dt, -1);
 }
 
 function nextDate(dt) {
-    return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1);
+    return addDays(dt, 1);
 }
 
 function startOfDay(dt) {
@@ -37,8 +41,9 @@ function formatTimeIso(t) {
 return formatTimeComponent(t.getHours()) + ':' + formatTimeComponent(t.getMinutes()) + ':' + formatTimeComponent(t.getSeconds());
 }
 
-const DATE_FORMAT_TITLE = { month:'short', day:'numeric', year:'numeric' };
+const DATE_FORMAT_TITLE = { year:'numeric', month:'short', day:'numeric' };
 const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
+const DATE_FORMAT_LIST = { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' };
 
 function formatDate(dt, fmt) {
   return Intl.DateTimeFormat([], fmt).format(dt);
@@ -50,6 +55,10 @@ function formatDateTitle(dt) {
 
 function formatDateNav(dt) {
     return formatDate(dt, DATE_FORMAT_NAV);
+}
+
+function formatDateList(dt) {
+    return formatDate(dt, DATE_FORMAT_LIST);
 }
 
 function formatTimeOccurrence(dt) {
@@ -77,7 +86,8 @@ function parseOccurrenceTarget(target) {
   }
 
 export default {
-    prevDate, nextDate, startOfDay, endOfDay, isToday,
-    formatDateTitle, formatDateNav, formatDateIso, formatTimeIso, formatTimeOccurrence, formatOccurrenceTarget,
+    addDays, prevDate, nextDate, startOfDay, endOfDay, isToday,
+    formatDateTitle, formatDateNav, formatDateList, formatDateIso, formatTimeIso,
+    formatTimeOccurrence, formatOccurrenceTarget,
     parseDateTime, parseOccurrenceTarget
 };

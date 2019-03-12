@@ -89,6 +89,19 @@ button:not(.PrimaryButton) {
   padding: 3rem 0;
 }
 
+.View > main h1 {
+  font-size: 120%;
+}
+
+.View > main table {
+  margin: 0 auto;
+}
+
+.View > main td {
+  padding: 0 0.5rem;
+  vertical-align: middle;
+}
+
 .NavToPrev::before {
   content: '‹';
   margin-right: 0.3rem;
@@ -137,4 +150,18 @@ button:not(.PrimaryButton) {
   background: linear-gradient(#2B054C 0%,#4C038E 5%,#914CCE 95%,#C9B3DC 100%);
   padding: 0.2rem 1rem 0;
   color: #DDC8F0;
+}
+
+.AlignLeft {
+  text-align: left;
+}
+
+.AlignRight {
+  text-align: right;
+}
+
+.Bar {
+  display: inline-block;
+  background: #914CCE;
+  height: 0.7rem;
 }
