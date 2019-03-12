@@ -95,11 +95,16 @@ button:not(.PrimaryButton) {
 
 .View > main table {
   margin: 0 auto;
+  font-size: 80%;
+  line-height: 1.3;
 }
 
 .View > main td {
-  padding: 0 0.5rem;
   vertical-align: middle;
+}
+
+.View > main td:not(:last-child) {
+  padding-right: 1em;
 }
 
 .NavToPrev::before {
@@ -163,5 +168,5 @@ button:not(.PrimaryButton) {
 .Bar {
   display: inline-block;
   background: #914CCE;
-  height: 0.7rem;
+  height: 0.7em;
 }

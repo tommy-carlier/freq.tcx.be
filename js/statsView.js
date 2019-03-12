@@ -21,7 +21,7 @@ function appendDayRow(f, date, count) {
     barCell.classList.add('AlignLeft');
     const bar = barCell.appendChild(document.createElement('DIV'));
     bar.classList.add('Bar');
-    bar.style.width = count + 'rem';
+    bar.style.width = count + 'em';
 
     f.appendChild(row);
   }

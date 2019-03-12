@@ -43,7 +43,7 @@ return formatTimeComponent(t.getHours()) + ':' + formatTimeComponent(t.getMinute
 
 const DATE_FORMAT_TITLE = { year:'numeric', month:'short', day:'numeric' };
 const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
-const DATE_FORMAT_LIST = { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' };
+const DATE_FORMAT_LIST = { year:'numeric', month:'2-digit', day:'2-digit' };
 
 function formatDate(dt, fmt) {
   return Intl.DateTimeFormat([], fmt).format(dt);
