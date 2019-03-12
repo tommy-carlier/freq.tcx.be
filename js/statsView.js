@@ -5,26 +5,31 @@ import ui from './ui.js';
 const statsView = ui.fromID('statsView'),
       last30DaysTable = ui.fromID('statsLast30Days');
 
-function appendDayRow(f, date, count) {
-  if(count > 0) {
-    const row = document.createElement('TR');
+function appendDayRow(f, label, value, withBar, rowClass) {
+  const row = document.createElement('TR');
+  if(rowClass) row.classList.add(rowClass);
 
-    const dateCell = row.appendChild(document.createElement('TD'));
-    dateCell.classList.add('AlignRight');
-    dateCell.textContent = time.formatDateList(date);
+  const dateCell = row.appendChild(document.createElement('TD'));
+  dateCell.classList.add('AlignRight');
+  dateCell.textContent = label;
 
-    const countCell = row.appendChild(document.createElement('TD'));
-    countCell.classList.add('AlignRight');
-    countCell.textContent = count;
+  const countCell = row.appendChild(document.createElement('TD'));
+  countCell.classList.add('AlignRight');
+  countCell.textContent = value;
 
-    const barCell = row.appendChild(document.createElement('TD'));
-    barCell.classList.add('AlignLeft');
+  const barCell = row.appendChild(document.createElement('TD'));
+  barCell.classList.add('AlignLeft');
+  if(withBar) {
     const bar = barCell.appendChild(document.createElement('DIV'));
     bar.classList.add('Bar');
-    bar.style.width = count + 'em';
-
-    f.appendChild(row);
+    bar.style.width = value + 'em';
   }
+
+  f.appendChild(row);
+}
+
+function appendDateRow(f, date, count) {
+  appendDayRow(f, time.formatDateList(date), count, true, date.getDay() == 1 ? 'BorderTop' : null);
 }
 
 async function loadLast30DaysTable(target) {
@@ -32,19 +37,34 @@ async function loadLast30DaysTable(target) {
   
   const f = document.createDocumentFragment();
   const today = new Date();
-  var currentDate = new Date(0), count = 0;
+  var currentDate = new Date(0), count = 0, minCount = 0, maxCount = 0, totalCount = 0, totalDays = 0;
+
+  function processDay() {
+    if(count > 0) {
+      appendDateRow(f, currentDate, count);
+      if(minCount == 0 || count < minCount) minCount = count;
+      if(count > maxCount) maxCount = count;
+      totalCount += count;
+      totalDays += 1;
+    }
+  }
   
   await data.getOccurrencesBetween(target, time.addDays(today, -30), time.addDays(today, 1), occ => {
     const date = time.startOfDay(occ);
     if(date.valueOf() != currentDate.valueOf()) {
-      appendDayRow(f, currentDate, count);
+      processDay();
       currentDate = date;
       count = 0;
     }
     count += 1;
     return true;
   });
-  appendDayRow(f, currentDate, count);
+  processDay();
+  if(count > 0) {
+    appendDayRow(f, 'Minimum', minCount, false, 'BorderTop');
+    appendDayRow(f, 'Maximum', maxCount);
+    appendDayRow(f, 'Average', Math.round(totalCount / totalDays));
+  }
 
   last30DaysTable.appendChild(f);
 }
