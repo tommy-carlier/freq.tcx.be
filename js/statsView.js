@@ -34,7 +34,7 @@ async function loadLast30DaysTable(target) {
   ui.removeAllChildren(last30DaysTable);
   
   const f = document.createDocumentFragment();
-  const today = new Date();
+  const today = time.startOfDay(new Date());
   var currentDate = new Date(0), count = 0, minCount = 0, maxCount = 0, totalCount = 0, totalDays = 0;
 
   function processDay() {
@@ -47,7 +47,7 @@ async function loadLast30DaysTable(target) {
     }
   }
   
-  await data.getOccurrencesBetween(target, time.addDays(today, -30), time.addDays(today, 1), occ => {
+  await data.getOccurrencesBetween(target, time.addDays(today, -30), today, occ => {
     const date = time.startOfDay(occ);
     if(date.valueOf() != currentDate.valueOf()) {
       processDay();
@@ -57,8 +57,9 @@ async function loadLast30DaysTable(target) {
     count += 1;
     return true;
   });
-  processDay();
+
   if(count > 0) {
+    processDay();
     appendDayRow(f, 'Minimum', minCount, 'BorderTop');
     appendDayRow(f, 'Maximum', maxCount);
     appendDayRow(f, 'Average', Math.round(totalCount / totalDays));
