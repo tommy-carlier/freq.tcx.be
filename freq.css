@@ -162,15 +162,21 @@ button:not(.PrimaryButton) {
   color: #DDC8F0;
 }
 
-.AlignLeft {
-  text-align: left;
+.CountTable {
+  max-width: 50em;
 }
 
-.AlignRight {
+.CountTable td:not(:last-child) {
   text-align: right;
+  white-space: nowrap;
 }
 
-.Bar {
+.CountTable td:last-child {
+  text-align: left;
+  width: 100%;
+}
+
+.CountTable td:last-child div {
   display: inline-block;
   background: #914CCE;
   height: 0.7em;

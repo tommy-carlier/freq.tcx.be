@@ -9,19 +9,11 @@ function appendDayRow(f, label, value, rowClass) {
   const row = document.createElement('TR');
   if(rowClass) row.classList.add(rowClass);
 
-  const dateCell = row.appendChild(document.createElement('TD'));
-  dateCell.classList.add('AlignRight');
-  dateCell.textContent = label;
-
-  const countCell = row.appendChild(document.createElement('TD'));
-  countCell.classList.add('AlignRight');
-  countCell.textContent = value;
+  row.appendChild(document.createElement('TD')).textContent = label;
+  row.appendChild(document.createElement('TD')).textContent = value;
 
   const barCell = row.appendChild(document.createElement('TD'));
-  barCell.classList.add('AlignLeft');
-  const bar = barCell.appendChild(document.createElement('DIV'));
-  bar.classList.add('Bar');
-  bar.style.width = value + 'em';
+  barCell.appendChild(document.createElement('DIV')).style.width = value + 'em';
 
   f.appendChild(row);
 }
