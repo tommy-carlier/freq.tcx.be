@@ -35,8 +35,8 @@ async function loadLast30DaysTable(target) {
 
   if(statistics.totalDays > 0) {
     appendDayRow(f, 'Minimum', statistics.minCount, 'BorderTop');
-    appendDayRow(f, 'Maximum', statistics.maxCount);
     appendDayRow(f, 'Average', Math.round(statistics.averageCount));
+    appendDayRow(f, 'Maximum', statistics.maxCount);
   }
 
   last30DaysTable.appendChild(f);
