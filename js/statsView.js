@@ -1,5 +1,5 @@
-import data from './data.js';
 import time from './time.js';
+import Statistics from './statistics.js';
 import ui from './ui.js';
 
 const statsView = ui.fromID('statsView'),
@@ -27,34 +27,16 @@ async function loadLast30DaysTable(target) {
   
   const f = document.createDocumentFragment();
   const today = time.startOfDay(new Date());
-  var currentDate = new Date(0), count = 0, minCount = 0, maxCount = 0, totalCount = 0, totalDays = 0;
-
-  function processDay() {
-    if(count > 0) {
-      appendDateRow(f, currentDate, count);
-      if(minCount == 0 || count < minCount) minCount = count;
-      if(count > maxCount) maxCount = count;
-      totalCount += count;
-      totalDays += 1;
-    }
+  var statistics = new Statistics();
+  await statistics.loadOccurrences(target, time.addDays(today, -30), today);
+  for(var [date, count] of statistics.dayCounts) {
+    appendDateRow(f, date, count);
   }
-  
-  await data.getOccurrencesBetween(target, time.addDays(today, -30), today, occ => {
-    const date = time.startOfDay(occ);
-    if(date.valueOf() != currentDate.valueOf()) {
-      processDay();
-      currentDate = date;
-      count = 0;
-    }
-    count += 1;
-    return true;
-  });
 
-  if(count > 0) {
-    processDay();
-    appendDayRow(f, 'Minimum', minCount, 'BorderTop');
-    appendDayRow(f, 'Maximum', maxCount);
-    appendDayRow(f, 'Average', Math.round(totalCount / totalDays));
+  if(statistics.totalDays > 0) {
+    appendDayRow(f, 'Minimum', statistics.minCount, 'BorderTop');
+    appendDayRow(f, 'Maximum', statistics.maxCount);
+    appendDayRow(f, 'Average', Math.round(statistics.averageCount));
   }
 
   last30DaysTable.appendChild(f);
