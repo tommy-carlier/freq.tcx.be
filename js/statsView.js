@@ -5,15 +5,25 @@ import ui from './ui.js';
 const statsView = ui.fromID('statsView'),
       last30DaysTable = ui.fromID('statsLast30Days');
 
-function appendDayRow(f, label, value, maxValue, rowClass) {
+function setCountCellContent(cell, count) {
+  const countStr = count.toString() + '';
+  cell.textContent = countStr;
+  if(!countStr.includes('.')) {
+    const decSpan = cell.appendChild(document.createElement('SPAN'));
+    decSpan.textContent = '.0';
+    decSpan.classList.add('Invisible');
+  }
+}
+
+function appendDayRow(f, label, count, maxCount, rowClass) {
   const row = document.createElement('TR');
   if(rowClass) row.classList.add(rowClass);
 
   row.appendChild(document.createElement('TD')).textContent = label;
-  row.appendChild(document.createElement('TD')).textContent = value;
+  setCountCellContent(row.appendChild(document.createElement('TD')), count);
 
   const barCell = row.appendChild(document.createElement('TD'));
-  barCell.appendChild(document.createElement('DIV')).style.width = (100 * value / maxValue) + '%';
+  barCell.appendChild(document.createElement('DIV')).style.width = (100 * count / maxCount) + '%';
 
   f.appendChild(row);
 }
@@ -35,7 +45,7 @@ async function loadLast30DaysTable(target) {
 
   if(statistics.totalDays > 0) {
     appendDayRow(f, 'Minimum', statistics.minCount, statistics.maxCount, 'BorderTop');
-    appendDayRow(f, 'Average', Math.round(statistics.averageCount), statistics.maxCount);
+    appendDayRow(f, 'Average', Math.round(statistics.averageCount * 10) / 10, statistics.maxCount);
     appendDayRow(f, 'Maximum', statistics.maxCount, statistics.maxCount);
   }
 
