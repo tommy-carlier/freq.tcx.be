@@ -39,6 +39,15 @@ ol > li::before {
   color: rgba(0, 0, 0, 0.4);
 }
 
+label {
+  text-align: left;
+  display: inline-block;
+}
+
+label > input {
+  display: block;
+}
+
 .View {
   box-sizing: border-box;
   padding: 0 0.5rem;
