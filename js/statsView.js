@@ -22,7 +22,7 @@ function appendPeriodDataRow(f, period) {
 
   ui.appendElementWithText(row, 'TD', period.days + ' days').setAttribute('rowspan', 2);
   ui.appendElementWithText(row, 'TD', period.minCount);
-  ui.appendElementWithText(row, 'TD', Math.round(period.averageCount * 10) / 10);
+  ui.appendElementWithText(row, 'TD', period.averageCount.toFixed(1));
   ui.appendElementWithText(row, 'TD', period.maxCount);
 
   f.appendChild(row);
