@@ -6,55 +6,51 @@ const statsView = ui.fromID('statsView'),
       recentDaysTable = ui.fromID('recentDays'),
       periodStatsTable = ui.fromID('periodStats');
 
-function appendPeriodHeaderRow(f) {
+function appendPeriodHeaderRow(f, minCount, maxCount) {
   const row = document.createElement('TR');
 
-  ui.appendElementWithText(row, 'TH', ' ');
-  ui.appendElementWithText(row, 'TH', 'Minimum');
-  ui.appendElementWithText(row, 'TH', 'Average');
-  ui.appendElementWithText(row, 'TH', 'Maximum');
+  ui.appendElementWithText(row, 'TH', 'days');
+  ui.appendElementWithText(row, 'TH', 'min');
+  ui.appendElementWithText(row, 'TH', 'avg');
+  ui.appendElementWithText(row, 'TH', 'max');
+  ui.appendElementWithText(row, 'TH', minCount + '–' + maxCount);
 
   f.appendChild(row);
 }
 
-function appendPeriodDataRow(f, period) {
+function percentStr(num) {
+  return (100 * num) + '%';
+}
+
+function appendBar(f, x, width) {
+  const bar = ui.appendElement(f, 'DIV');
+  bar.classList.add('Bar');
+  if(x > 0) bar.style.marginLeft = percentStr(x);
+  bar.style.width = percentStr(width);
+  return bar;
+}
+
+function appendPeriodRow(f, period, maxCount) {
   const row = document.createElement('TR');
 
-  ui.appendElementWithText(row, 'TD', period.days + ' days').setAttribute('rowspan', 2);
+  ui.appendElementWithText(row, 'TD', period.days);
   ui.appendElementWithText(row, 'TD', period.minCount);
   ui.appendElementWithText(row, 'TD', period.averageCount.toFixed(1));
   ui.appendElementWithText(row, 'TD', period.maxCount);
 
-  f.appendChild(row);
-}
-
-function appendPeriodBarRow(f, period, maxCount) {
-  const row = document.createElement('TR');
-  row.classList.add('HasBar');
-
-  const cell = ui.appendElement(row, 'TD');
-  cell.setAttribute('colspan', 3);
-
-  const barMin = ui.appendElement(cell, 'DIV');
-  barMin.classList.add('Bar');
-  barMin.classList.add('Light');
-  barMin.style.marginLeft = (100 * period.minCount / maxCount) + '%';
-  barMin.style.width = (100 * (period.averageCount - period.minCount) / maxCount) + '%';
-
-  const barMax = ui.appendElement(cell, 'DIV');
-  barMax.classList.add('Bar');
-  barMax.style.width = (100 * (period.maxCount - period.averageCount) / maxCount) + '%';
+  const barCell = ui.appendElement(row, 'TD');
+  appendBar(barCell, period.minCount / maxCount, (period.averageCount - period.minCount) / maxCount).classList.add('Light');
+  appendBar(barCell, 0, (period.maxCount - period.averageCount) / maxCount);
 
   f.appendChild(row);
 }
 
-function buildPeriodStatsUI(statistics) {
+function buildPeriodStatsUI(stats) {
   const f = document.createDocumentFragment();
 
-  appendPeriodHeaderRow(f);
-  for(var period of statistics.periods) {
-    appendPeriodDataRow(f, period);
-    appendPeriodBarRow(f, period, statistics.maxCount);
+  appendPeriodHeaderRow(f, stats.minCount, stats.maxCount);
+  for(var period of stats.periods) {
+    appendPeriodRow(f, period, stats.maxCount);
   }
 
   periodStatsTable.appendChild(f);
@@ -66,19 +62,16 @@ function appendDayRow(f, date, count, maxCount) {
 
   ui.appendElementWithText(row, 'TD', time.formatDateList(date));
   ui.appendElementWithText(row, 'TD', count);
-
-  const bar = ui.appendElement(ui.appendElement(row, 'TD'), 'DIV');
-  bar.classList.add('Bar');
-  bar.style.width = (100 * count / maxCount) + '%';
+  appendBar(ui.appendElement(row, 'TD'), 0, count / maxCount);
 
   f.appendChild(row);
 }
 
-function buildRecentDaysUI(statistics) {
+function buildRecentDaysUI(stats) {
   const f = document.createDocumentFragment();
 
-  for(var [date, count] of statistics.dayCounts) {
-    appendDayRow(f, date, count, statistics.maxCount);
+  for(var [date, count] of stats.dayCounts) {
+    appendDayRow(f, date, count, stats.maxCount);
   }
   
   recentDaysTable.appendChild(f);
@@ -88,11 +81,11 @@ async function loadStatistics(target) {
   ui.removeAllChildren(periodStatsTable);
   ui.removeAllChildren(recentDaysTable);
   
-  var statistics = new Statistics(30);
-  await statistics.loadOccurrences(target);
+  var stats = new Statistics(30);
+  await stats.loadOccurrences(target);
 
-  buildPeriodStatsUI(statistics);
-  buildRecentDaysUI(statistics);
+  buildPeriodStatsUI(stats);
+  buildRecentDaysUI(stats);
 }
 
 async function navToView(target) {

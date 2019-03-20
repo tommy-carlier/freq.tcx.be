@@ -5,14 +5,15 @@ class Statistics {
   constructor(recentDays) {
     this.today = time.startOfDay(new Date());
     this.minDateDayCountsMs = time.addDays(this.today, -recentDays).valueOf();
+    this.minCount = 0;
     this.maxCount = 0;
     this.dayCounts = new Map();
     this.periods = [
-      new PeriodStatistics(this.today, 7),
-      new PeriodStatistics(this.today, 14),
-      new PeriodStatistics(this.today, 30),
+      new PeriodStatistics(this.today, 90),
       new PeriodStatistics(this.today, 60),
-      new PeriodStatistics(this.today, 90)
+      new PeriodStatistics(this.today, 30),
+      new PeriodStatistics(this.today, 14),
+      new PeriodStatistics(this.today, 7)
     ];
   }
 
@@ -21,6 +22,7 @@ class Statistics {
     function finishCurrentDate() {
       if(currentCount > 0) {
         if(currentDate.valueOf() >= self.minDateDayCountsMs) self.dayCounts.set(currentDate, currentCount);
+        if(self.minCount == 0 || currentCount < self.minCount) self.minCount = currentCount;
         if(currentCount > self.maxCount) self.maxCount = currentCount;
         for(var period of self.periods) {
           period.addDayCount(currentDate, currentCount);

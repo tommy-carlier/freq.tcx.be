@@ -172,27 +172,25 @@ button:not(.PrimaryButton) {
   color: #DDC8F0;
 }
 
-#periodStats, #recentDays {
+.CountTable {
   max-width: 50em;
   text-align: right;
 }
 
-#periodStats th {
+.CountTable th {
   font-weight: normal;
   border-bottom: solid 1px rgba(0, 0, 0, 0.4);
 }
 
-#periodStats tr:not(.HasBar) td {
-  white-space: nowrap;
-  vertical-align: baseline;
-}
-
-#recentDays td:not(:last-child) {
+.CountTable td:not(:last-child) {
   white-space: nowrap;
 }
 
-#periodStats tr.HasBar td,
-#recentDays td:last-child {
+.CountTable th:last-child {
+  text-align: center;
+}
+
+.CountTable td:last-child {
   text-align: left;
   width: 100%;
 }
