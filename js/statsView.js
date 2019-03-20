@@ -3,58 +3,101 @@ import Statistics from './statistics.js';
 import ui from './ui.js';
 
 const statsView = ui.fromID('statsView'),
-      last30DaysTable = ui.fromID('statsLast30Days');
+      recentDaysTable = ui.fromID('recentDays'),
+      periodStatsTable = ui.fromID('periodStats');
 
-function setCountCellContent(cell, count) {
-  const countStr = count.toString() + '';
-  cell.textContent = countStr;
-  if(!countStr.includes('.')) {
-    const decSpan = cell.appendChild(document.createElement('SPAN'));
-    decSpan.textContent = '.0';
-    decSpan.classList.add('Invisible');
-  }
-}
-
-function appendDayRow(f, label, count, maxCount, rowClass) {
+function appendPeriodHeaderRow(f) {
   const row = document.createElement('TR');
-  if(rowClass) row.classList.add(rowClass);
 
-  row.appendChild(document.createElement('TD')).textContent = label;
-  setCountCellContent(row.appendChild(document.createElement('TD')), count);
-
-  const barCell = row.appendChild(document.createElement('TD'));
-  barCell.appendChild(document.createElement('DIV')).style.width = (100 * count / maxCount) + '%';
+  ui.appendElementWithText(row, 'TH', ' ');
+  ui.appendElementWithText(row, 'TH', 'Minimum');
+  ui.appendElementWithText(row, 'TH', 'Average');
+  ui.appendElementWithText(row, 'TH', 'Maximum');
 
   f.appendChild(row);
 }
 
-function appendDateRow(f, date, count, maxCount) {
-  appendDayRow(f, time.formatDateList(date), count, maxCount, date.getDay() == 1 ? 'BorderTop' : null);
+function appendPeriodDataRow(f, period) {
+  const row = document.createElement('TR');
+
+  ui.appendElementWithText(row, 'TD', period.days + ' days').setAttribute('rowspan', 2);
+  ui.appendElementWithText(row, 'TD', period.minCount);
+  ui.appendElementWithText(row, 'TD', Math.round(period.averageCount * 10) / 10);
+  ui.appendElementWithText(row, 'TD', period.maxCount);
+
+  f.appendChild(row);
 }
 
-async function loadLast30DaysTable(target) {
-  ui.removeAllChildren(last30DaysTable);
-  
+function appendPeriodBarRow(f, period, maxCount) {
+  const row = document.createElement('TR');
+  row.classList.add('HasBar');
+
+  const cell = ui.appendElement(row, 'TD');
+  cell.setAttribute('colspan', 3);
+
+  const barMin = ui.appendElement(cell, 'DIV');
+  barMin.classList.add('Bar');
+  barMin.classList.add('Light');
+  barMin.style.marginLeft = (100 * period.minCount / maxCount) + '%';
+  barMin.style.width = (100 * (period.averageCount - period.minCount) / maxCount) + '%';
+
+  const barMax = ui.appendElement(cell, 'DIV');
+  barMax.classList.add('Bar');
+  barMax.style.width = (100 * (period.maxCount - period.averageCount) / maxCount) + '%';
+
+  f.appendChild(row);
+}
+
+function buildPeriodStatsUI(statistics) {
   const f = document.createDocumentFragment();
-  const today = time.startOfDay(new Date());
-  var statistics = new Statistics();
-  await statistics.loadOccurrences(target, time.addDays(today, -30), today);
+
+  appendPeriodHeaderRow(f);
+  for(var period of statistics.periods) {
+    appendPeriodDataRow(f, period);
+    appendPeriodBarRow(f, period, statistics.maxCount);
+  }
+
+  periodStatsTable.appendChild(f);
+}
+
+function appendDayRow(f, date, count, maxCount) {
+  const row = document.createElement('TR');
+  if(date.getDay() == 1) row.classList.add('BorderTop');
+
+  ui.appendElementWithText(row, 'TD', time.formatDateList(date));
+  ui.appendElementWithText(row, 'TD', count);
+
+  const bar = ui.appendElement(ui.appendElement(row, 'TD'), 'DIV');
+  bar.classList.add('Bar');
+  bar.style.width = (100 * count / maxCount) + '%';
+
+  f.appendChild(row);
+}
+
+function buildRecentDaysUI(statistics) {
+  const f = document.createDocumentFragment();
+
   for(var [date, count] of statistics.dayCounts) {
-    appendDateRow(f, date, count, statistics.maxCount);
+    appendDayRow(f, date, count, statistics.maxCount);
   }
+  
+  recentDaysTable.appendChild(f);
+}
 
-  if(statistics.totalDays > 0) {
-    appendDayRow(f, 'Minimum', statistics.minCount, statistics.maxCount, 'BorderTop');
-    appendDayRow(f, 'Average', Math.round(statistics.averageCount * 10) / 10, statistics.maxCount);
-    appendDayRow(f, 'Maximum', statistics.maxCount, statistics.maxCount);
-  }
+async function loadStatistics(target) {
+  ui.removeAllChildren(periodStatsTable);
+  ui.removeAllChildren(recentDaysTable);
+  
+  var statistics = new Statistics(30);
+  await statistics.loadOccurrences(target);
 
-  last30DaysTable.appendChild(f);
+  buildPeriodStatsUI(statistics);
+  buildRecentDaysUI(statistics);
 }
 
 async function navToView(target) {
   ui.navToView(statsView);
-  await loadLast30DaysTable(target);
+  await loadStatistics(target);
 }
 
 export { navToView };

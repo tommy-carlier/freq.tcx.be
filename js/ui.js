@@ -29,6 +29,16 @@ function setClassIf(e, cls, add) {
   else e.classList.remove(cls);
 }
 
+function appendElement(f, name) {
+  return f.appendChild(document.createElement(name));
+}
+
+function appendElementWithText(f, name, text) {
+  const e = appendElement(f, name);
+  e.textContent = text;
+  return e;
+}
+
 function navToView(scr) {
   if(!scr.classList.contains('Visible')) {
     const es = document.getElementsByClassName('View');
@@ -39,4 +49,4 @@ function navToView(scr) {
   }
 }
 
-export default { fromID, getTarget, getAction, removeAllChildren, scrollToBottom, setClassIf, navToView };
+export default { fromID, getTarget, getAction, removeAllChildren, scrollToBottom, setClassIf, appendElement, appendElementWithText, navToView };
