@@ -17,7 +17,7 @@ class Statistics {
     ];
   }
 
-  async loadOccurrences(target) {
+  async loadOccurrences(target, dtCB) {
     var currentDate = new Date(0), currentCount = 0, self = this;
     function finishCurrentDate() {
       if(currentCount > 0) {
@@ -38,6 +38,7 @@ class Statistics {
         currentCount = 0;
       }
       currentCount += 1;
+      if(dtCB) dtCB(occ);
       return true;
     });
 

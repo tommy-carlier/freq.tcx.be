@@ -4,7 +4,8 @@ import ui from './ui.js';
 
 const statsView = ui.fromID('statsView'),
       recentDaysTable = ui.fromID('recentDays'),
-      periodStatsTable = ui.fromID('periodStats');
+      periodStatsTable = ui.fromID('periodStats'),
+      timeOfDayChart = ui.fromID('timeOfDay');
 
 function appendPeriodHeaderRow(f, minCount, maxCount) {
   const row = document.createElement('TR');
@@ -78,15 +79,54 @@ function buildRecentDaysUI(stats) {
   recentDaysTable.appendChild(f);
 }
 
+function fracTimeToRadians(t) {
+  return (t - 6) * Math.PI / 12;
+}
+
+function createTimeOfDayLine(dt) {
+  const angle = fracTimeToRadians(time.fractionalTimeOfDay(dt));
+  const x = Math.cos(angle), y = Math.sin(angle);
+  
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', x * 0.1);
+  line.setAttribute('y1', y * 0.1);
+  line.setAttribute('x2', x * 0.7);
+  line.setAttribute('y2', y * 0.7);
+  line.setAttribute('vector-effect', 'non-scaling-stroke');
+  return line;
+}
+
+function createTimeOfDayHourLabel(hour) {
+  const angle = fracTimeToRadians(hour);
+  const x = Math.cos(angle), y = Math.sin(angle);
+  const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  text.textContent = hour;
+  text.setAttribute('x', x * 0.9);
+  text.setAttribute('y', y * 0.9);
+  text.setAttribute('text-anchor', 'middle');
+  if(hour % 3 != 0) text.setAttribute('opacity', 0.3);
+  return text;
+}
+
 async function loadStatistics(target) {
   ui.removeAllChildren(periodStatsTable);
   ui.removeAllChildren(recentDaysTable);
+  ui.removeAllChildren(timeOfDayChart);
   
-  var stats = new Statistics(30);
-  await stats.loadOccurrences(target);
+  const stats = new Statistics(30);
+  const chartFrag = document.createDocumentFragment();
+
+  for(var i = 0; i <= 23; i++) {
+    chartFrag.appendChild(createTimeOfDayHourLabel(i));
+  }
+
+  await stats.loadOccurrences(target, dt => {
+    chartFrag.appendChild(createTimeOfDayLine(dt));
+  });
 
   buildPeriodStatsUI(stats);
   buildRecentDaysUI(stats);
+  timeOfDayChart.appendChild(chartFrag);
 }
 
 async function navToView(target) {

@@ -22,6 +22,10 @@ function endOfDay(dt) {
     return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), 23, 59, 59, 999);
 }
 
+function fractionalTimeOfDay(dt) {
+    return dt.getHours() + dt.getMinutes() / 60 + dt.getSeconds() / 3600;
+}
+
 function isToday(dt) {
     const today = new Date();
     return today.getFullYear() == dt.getFullYear() 
@@ -86,7 +90,7 @@ function parseOccurrenceTarget(target) {
   }
 
 export default {
-    addDays, prevDate, nextDate, startOfDay, endOfDay, isToday,
+    addDays, prevDate, nextDate, startOfDay, endOfDay, fractionalTimeOfDay, isToday,
     formatDateTitle, formatDateNav, formatDateList, formatDateIso, formatTimeIso,
     formatTimeOccurrence, formatOccurrenceTarget,
     parseDateTime, parseOccurrenceTarget

@@ -204,3 +204,17 @@ button:not(.PrimaryButton) {
 .Bar.Light {
   background: #914CCE80;
 }
+
+.SquareChart {
+  width: 70vmin;
+  height: 70vmin;
+  max-width: 30rem;
+  max-height: 30rem;
+  font-size: 0.1px;
+}
+
+#timeOfDay line {
+  stroke: #914CCE;
+  stroke-width: 1px;
+  stroke-linecap: round;
+}
