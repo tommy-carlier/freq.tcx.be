@@ -30,7 +30,7 @@ function appendBar(f, x, width) {
   return bar;
 }
 
-function appendPeriodRow(f, period, maxCount) {
+function appendPeriodRow(f, period, minCount, maxCount) {
   const row = document.createElement('TR');
 
   ui.appendElementWithText(row, 'TD', period.days);
@@ -39,8 +39,9 @@ function appendPeriodRow(f, period, maxCount) {
   ui.appendElementWithText(row, 'TD', period.maxCount);
 
   const barCell = ui.appendElement(row, 'TD');
-  appendBar(barCell, period.minCount / maxCount, (period.averageCount - period.minCount) / maxCount).classList.add('Light');
-  appendBar(barCell, 0, (period.maxCount - period.averageCount) / maxCount);
+  const divisor = maxCount - minCount;
+  appendBar(barCell, (period.minCount - minCount) / divisor, (period.averageCount - period.minCount) / divisor).classList.add('Light');
+  appendBar(barCell, 0, (period.maxCount - period.averageCount) / divisor);
 
   f.appendChild(row);
 }
@@ -50,7 +51,7 @@ function buildPeriodStatsUI(stats) {
 
   appendPeriodHeaderRow(f, stats.minCount, stats.maxCount);
   for(var period of stats.periods) {
-    appendPeriodRow(f, period, stats.maxCount);
+    appendPeriodRow(f, period, stats.minCount, stats.maxCount);
   }
 
   periodStatsTable.appendChild(f);
