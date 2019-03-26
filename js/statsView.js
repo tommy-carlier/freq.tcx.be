@@ -83,7 +83,7 @@ function fracTimeToRadians(t) {
   return (t - 6) * Math.PI / 12;
 }
 
-function createTimeOfDayLine(dt) {
+function createTimeOfDayLine(dt, opacity) {
   const angle = fracTimeToRadians(time.fractionalTimeOfDay(dt));
   const x = Math.cos(angle), y = Math.sin(angle);
   
@@ -93,6 +93,7 @@ function createTimeOfDayLine(dt) {
   line.setAttribute('x2', x * 0.7);
   line.setAttribute('y2', y * 0.7);
   line.setAttribute('vector-effect', 'non-scaling-stroke');
+  line.setAttribute('opacity', opacity);
   return line;
 }
 
@@ -120,8 +121,13 @@ async function loadStatistics(target) {
     chartFrag.appendChild(createTimeOfDayHourLabel(i));
   }
 
+  var minValue = 0;
+  const maxValue = stats.today.valueOf();
   await stats.loadOccurrences(target, dt => {
-    chartFrag.appendChild(createTimeOfDayLine(dt));
+    const value = dt.valueOf();
+    if(minValue == 0) minValue = value;
+    const opacity = 0.1 + 0.9 * (value - minValue) / (maxValue - minValue);
+    chartFrag.appendChild(createTimeOfDayLine(dt, opacity));
   });
 
   buildPeriodStatsUI(stats);
