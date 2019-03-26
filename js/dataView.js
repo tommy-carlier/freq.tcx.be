@@ -32,6 +32,11 @@ async function exportData() {
   }
 }
 
-actions.register(exportData);
+async function checkForUpdates() {
+  applicationCache.update();
+  alert('The app will automatically reload when an update is available.');
+}
+
+actions.register(exportData, checkForUpdates);
 
 export { navToView };
