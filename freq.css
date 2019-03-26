@@ -206,10 +206,10 @@ button:not(.PrimaryButton) {
 }
 
 .SquareChart {
-  width: 80vmin;
-  height: 80vmin;
-  max-width: 30rem;
-  max-height: 30rem;
+  width: 90vmin;
+  height: 90vmin;
+  max-width: 20rem;
+  max-height: 20rem;
   font-size: 0.1px;
 }
 
