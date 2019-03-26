@@ -85,10 +85,14 @@ async function navToStats(target) {
   (await import('./statsView.js')).navToView(target);
 }
 
+async function navToData(target) {
+  (await import('./dataView.js')).navToView(target);
+}
+
 async function editOccurrence(target) {
   (await import('./editView.js')).navToView(target);
 }
 
-actions.register(navToPrevDay, navToNextDay, navToCurrentDay, navToStats, registerOccurrence, editOccurrence);
+actions.register(navToPrevDay, navToNextDay, navToCurrentDay, navToStats, navToData, registerOccurrence, editOccurrence);
 
 export default { navToDay };

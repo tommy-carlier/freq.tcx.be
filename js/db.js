@@ -7,7 +7,7 @@ function reqPromise(req) {
 
 function forEachKey(store, range, cb) {
   return new Promise(resolve => {
-    store.openKeyCursor(range).onsuccess = ev => {
+    (range ? store.openKeyCursor(range) : store.openKeyCursor()).onsuccess = ev => {
       const cursor = ev.target.result;
       if(cursor) {
         if(cb(cursor.key)) cursor.continue();

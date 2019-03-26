@@ -32,11 +32,19 @@ async function getFirstOccurrence(name) {
   return first;
 }
 
-async function getOccurrencesBetween(name, min, max, cb) {
+async function getOccurrencesInRange(name, range, cb) {
   const db = await open(name),
         tx = db.transaction(OCC, RO);
-  await DB.forEachKey(tx.objectStore(OCC), IDBKeyRange.bound(min, max), cb);
+  await DB.forEachKey(tx.objectStore(OCC), range, cb);
   await DB.complete(tx);
+}
+
+function getAllOccurrences(name, cb) {
+  return getOccurrencesInRange(name, null, cb);
+}
+
+function getOccurrencesBetween(name, min, max, cb) {
+  return getOccurrencesInRange(name, IDBKeyRange.bound(min, max), cb);
 }
 
 async function modifyOccurrence(name, oldDate, newDate) {
@@ -56,4 +64,4 @@ async function modifyOccurrence(name, oldDate, newDate) {
   await DB.complete(tx);
 }
 
-export default { registerOccurrence, getFirstOccurrence, getOccurrencesBetween, modifyOccurrence };
+export default { registerOccurrence, getFirstOccurrence, getAllOccurrences, getOccurrencesBetween, modifyOccurrence };
