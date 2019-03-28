@@ -41,7 +41,7 @@ function appendPeriodRow(f, period, minCount, maxCount) {
 
   const barCell = ui.appendElement(row, 'TD');
   const divisor = maxCount - minCount;
-  appendBar(barCell, (period.minCount - minCount) / divisor, (period.averageCount - period.minCount) / divisor).classList.add('Light');
+  appendBar(barCell, (period.minCount - minCount) / divisor, (period.averageCount - period.minCount) / divisor).classList.add('light');
   appendBar(barCell, 0, (period.maxCount - period.averageCount) / divisor);
 
   f.appendChild(row);
@@ -60,7 +60,7 @@ function buildPeriodStatsUI(stats) {
 
 function appendDayRow(f, date, count, maxCount) {
   const row = document.createElement('TR');
-  if(date.getDay() == 1) row.classList.add('BorderTop');
+  if(date.getDay() == 1) row.classList.add('borderTop');
 
   ui.appendElementWithText(row, 'TD', time.formatDateList(date));
   ui.appendElementWithText(row, 'TD', count);

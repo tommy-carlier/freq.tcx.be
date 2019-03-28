@@ -21,7 +21,7 @@ function createOccurrenceItem(type, dt) {
 }
 
 function setOccurrencesListAdded(added) {
-  ui.setClassIf(dayOccurrencesList, 'Added', added);
+  ui.setClassIf(dayOccurrencesList, 'added', added);
 }
 
 async function loadOccurrences(dt) {

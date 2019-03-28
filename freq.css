@@ -55,7 +55,7 @@ label > input {
   display: none;
 }
 
-.View.Visible {
+.View.visible {
   display: block;
   min-height: 100%;
 }
@@ -119,7 +119,7 @@ button:not(.PrimaryButton) {
   padding-right: 0.7em;
 }
 
-.View > main .BorderTop:not(:first-child) td {
+.View > main .borderTop:not(:first-child) td {
   border-top: solid 1px rgba(0, 0, 0, 0.4);
 }
 
@@ -151,7 +151,7 @@ button:not(.PrimaryButton) {
   cursor: pointer; /* this is necessary for iOS to bubble the click-event: see http://gravitydept.com/blog/js-click-event-bubbling-on-ios */
 }
 
-.OccurrenceList.Added > li:last-child {
+.OccurrenceList.added > li:last-child {
   font-weight: bold;
 }
 
@@ -202,7 +202,7 @@ button:not(.PrimaryButton) {
   height: 0.7em;
 }
 
-.Bar.Light {
+.Bar.light {
   background: #914CCE80;
 }
 

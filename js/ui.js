@@ -40,11 +40,11 @@ function appendElementWithText(f, name, text) {
 }
 
 function navToView(scr) {
-  if(!scr.classList.contains('Visible')) {
+  if(!scr.classList.contains('visible')) {
     const es = document.getElementsByClassName('View');
     for(var i = 0, n = es.length; i < n; i++) {
       const e = es[i];
-      setClassIf(e, 'Visible', e == scr);
+      setClassIf(e, 'visible', e == scr);
     }
   }
 }
