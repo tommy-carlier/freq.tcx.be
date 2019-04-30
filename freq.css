@@ -206,20 +206,6 @@ button:not(.PrimaryButton) {
   background: #914CCE80;
 }
 
-.SquareChart {
-  width: 90vmin;
-  height: 90vmin;
-  max-width: 20rem;
-  max-height: 20rem;
-  font-size: 0.1px;
-}
-
-#timeOfDay line {
-  stroke: #914CCE;
-  stroke-width: 1px;
-  stroke-linecap: round;
-}
-
 #dataTextArea {
   background: none;
   border: none;
