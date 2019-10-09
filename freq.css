@@ -162,7 +162,6 @@ button:not(.PrimaryButton) {
   border-radius: 0.5rem;
   color: #FFF;
   background: linear-gradient(#C9B3DC 0%,#914CCE 5%,#4C038E 95%,#2B054C 100%);
-  text-shadow: -1px -1px 0 #000,0 -1px 0 #000,1px -1px 0 #000,1px 0 0 #000,1px 1px 0 #000,0 1px 0 #000,-1px  1px 0 #000,-1px 0 0 #000;
   -webkit-appearance: none;
   font-weight: bold;
 }
@@ -204,6 +203,16 @@ button:not(.PrimaryButton) {
 
 .Bar.light {
   background: #914CCE80;
+}
+
+.Bar:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.Bar:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 #dataTextArea {
