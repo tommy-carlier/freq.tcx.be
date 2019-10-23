@@ -158,18 +158,16 @@ button:not(.PrimaryButton) {
 .PrimaryButton {
   padding: 0 1rem;
   margin: 0.25rem;
-  border: solid 1px #390965;
-  border-radius: 0.5rem;
+  border: solid 2px #390965;
   color: #FFF;
-  background: linear-gradient(#C9B3DC 0%,#914CCE 5%,#4C038E 95%,#2B054C 100%);
+  background: #914CCE;
   -webkit-appearance: none;
-  font-weight: bold;
 }
 
 .PrimaryButton:active {
-  background: linear-gradient(#2B054C 0%,#4C038E 5%,#914CCE 95%,#C9B3DC 100%);
-  padding: 0.2rem 1rem 0;
+  background: #4C038E;
   color: #DDC8F0;
+  transform: translateY(2px);
 }
 
 .CountTable {
