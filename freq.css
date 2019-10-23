@@ -215,6 +215,10 @@ button:not(.PrimaryButton) {
   border-bottom-right-radius: 5px;
 }
 
+#periodStats .Bar {
+  min-width: 0.35em;
+}
+
 #dataTextArea {
   background: none;
   border: none;
