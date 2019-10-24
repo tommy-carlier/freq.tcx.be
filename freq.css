@@ -83,6 +83,7 @@ label > input {
   flex-grow: 1;
   font-weight: bold;
   line-height: 3rem;
+  letter-spacing: -0.05em;
 }
 
 button:not(.PrimaryButton) {
