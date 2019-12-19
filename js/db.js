@@ -27,11 +27,10 @@ function firstKey(store) {
 
 function deleteRange(store, range) {
   return new Promise(resolve => {
-    store.openCursor(range).onsuccess = ev => {
-      const cursor = ev.target.result;
+    store.openCursor(range).onsuccess = cev => {
+      const cursor = cev.target.result;
       if(cursor) {
-        await reqPromise(cursor.delete());
-        cursor.continue();
+        cursor.delete().onsuccess = () => { cursor.continue(); };
       } else resolve();
     };
   });
