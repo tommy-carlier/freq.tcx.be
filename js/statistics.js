@@ -3,7 +3,7 @@ import data from './data.js';
 
 class Statistics {
   constructor() {
-    this.today = time.startOfDay(new Date());
+    this.today = time.today();
     this.minDateDayCountsMs = time.addDays(this.today, -30).valueOf();
     this.minCount = 0;
     this.maxCount = 0;

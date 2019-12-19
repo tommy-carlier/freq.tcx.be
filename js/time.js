@@ -33,6 +33,10 @@ function isToday(dt) {
         && today.getDate() == dt.getDate();
 }
 
+function today() {
+    return startOfDay(new Date());
+}
+
 function formatTimeComponent(c) {
     return c < 10 ? '0' + c : c;
 }
@@ -90,7 +94,7 @@ function parseOccurrenceTarget(target) {
   }
 
 export default {
-    addDays, prevDate, nextDate, startOfDay, endOfDay, fractionalTimeOfDay, isToday,
+    addDays, prevDate, nextDate, startOfDay, endOfDay, fractionalTimeOfDay, today, isToday,
     formatDateTitle, formatDateNav, formatDateList, formatDateIso, formatTimeIso,
     formatTimeOccurrence, formatOccurrenceTarget,
     parseDateTime, parseOccurrenceTarget

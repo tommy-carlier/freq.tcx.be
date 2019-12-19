@@ -1,4 +1,5 @@
 import DB from './db.js';
+import time from './time.js';
 
 const OCC = 'Occurrences', RO = 'readonly', RW = 'readwrite';
 
@@ -64,4 +65,13 @@ async function modifyOccurrence(name, oldDate, newDate) {
   await DB.complete(tx);
 }
 
-export default { registerOccurrence, getFirstOccurrence, getAllOccurrences, getOccurrencesBetween, modifyOccurrence };
+async function deleteOldOccurrences(name, maxDays) {
+  const minDate = time.addDays(time.today(), -maxDays),
+        db = await open(name),
+        tx = db.transaction(OCC, RW),
+        store = tx.objectStore(OCC);
+  
+  await DB.deleteRange(store, IDBKeyRange.upperBound(minDate, true));
+}
+
+export default { registerOccurrence, getFirstOccurrence, getAllOccurrences, getOccurrencesBetween, modifyOccurrence, deleteOldOccurrences };

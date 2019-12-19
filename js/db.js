@@ -25,6 +25,18 @@ function firstKey(store) {
   });
 }
 
+function deleteRange(store, range) {
+  return new Promise(resolve => {
+    store.openCursor(range).onsuccess = ev => {
+      const cursor = ev.target.result;
+      if(cursor) {
+        await reqPromise(cursor.delete());
+        cursor.continue();
+      } else resolve();
+    };
+  });
+}
+
 function open(name, version, upgradeCB) {
   const req = indexedDB.open(name, version);
   req.onupgradeneeded = function() { upgradeCB(req.result) };
@@ -39,4 +51,4 @@ function complete(tx) {
   });
 }
 
-export default { reqPromise, open, complete, forEachKey, firstKey };
+export default { reqPromise, open, complete, forEachKey, firstKey, deleteRange };
