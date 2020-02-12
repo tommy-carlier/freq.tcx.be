@@ -11,16 +11,28 @@ class Statistics {
     this.hourCounts = new Map();
     this.maxHourCount = 0;
     this.periods = [
-      createDayPeriodStatistics(this.today, 90),
-      createDayPeriodStatistics(this.today, 60),
-      createDayPeriodStatistics(this.today, 30),
-      createDayPeriodStatistics(this.today, 14),
-      createDayPeriodStatistics(this.today, 7)
+      createDayPeriodStats(this.today, 90),
+      createDayPeriodStats(this.today, 60),
+      createDayPeriodStats(this.today, 30),
+      createDayPeriodStats(this.today, 14),
+      createDayPeriodStats(this.today, 7),
+      null,
+      createWeekDayStats(1),
+      createWeekDayStats(2),
+      createWeekDayStats(3),
+      createWeekDayStats(4),
+      createWeekDayStats(5),
+      createWeekDayStats(6),
+      createWeekDayStats(0)
     ];
 
-    function createDayPeriodStatistics(today, days) {
+    function createDayPeriodStats(today, days) {
       const minDateMs = time.addDays(today, -days).valueOf();
       return new PeriodStatistics(days + 'd', date => date.valueOf() >= minDateMs);
+    }
+
+    function createWeekDayStats(weekDay) {
+      return new PeriodStatistics(time.getWeekDayLabel(weekDay), date => date.getDay() == weekDay);
     }
   }
 
@@ -31,10 +43,9 @@ class Statistics {
     function finishCurrentDate() {
       if(currentCount > 0) {
         if(currentDate.valueOf() >= self.minDateDayCountsMs) self.dayCounts.set(currentDate, currentCount);
-        if(self.minCount == 0 || currentCount < self.minCount) self.minCount = currentCount;
         if(currentCount > self.maxCount) self.maxCount = currentCount;
         for(var period of self.periods) {
-          period.addDayCount(currentDate, currentCount);
+          if(period) period.addDayCount(currentDate, currentCount);
         }
       }
     }
@@ -71,7 +82,10 @@ class Statistics {
 
     finishCurrentDate();
     for(var period of self.periods) {
-      period.finish();
+      if(period) {
+        period.finish();
+        if(this.minCount == 0 || period.minCount < this.minCount) this.minCount = period.minCount;
+      }
     }
   }
 }

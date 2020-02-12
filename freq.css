@@ -204,18 +204,8 @@ button:not(.PrimaryButton) {
   background: #914CCE80;
 }
 
-.Bar:first-child {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-.Bar:last-child {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
 #periodStats .Bar {
-  min-width: 0.35em;
+  min-width: 0.1em;
 }
 
 #dataTextArea {

@@ -14,7 +14,7 @@ function appendPeriodHeaderRow(f, minCount, maxCount) {
   ui.appendElementWithText(row, 'TH', 'min');
   ui.appendElementWithText(row, 'TH', 'avg');
   ui.appendElementWithText(row, 'TH', 'max');
-  ui.appendElementWithText(row, 'TH', minCount + '–' + maxCount);
+  ui.appendElementWithText(row, 'TH', '');
 
   f.appendChild(row);
 }
@@ -26,13 +26,17 @@ function percentStr(num) {
 function appendBar(f, x, width) {
   const bar = ui.appendElement(f, 'DIV');
   bar.classList.add('Bar');
-  if(x > 0) bar.style.marginLeft = percentStr(x);
+  if(x > 0) {
+    if(x > 0.99) x = 0.99;
+    bar.style.marginLeft = percentStr(x);
+  }
   bar.style.width = percentStr(width);
   return bar;
 }
 
-function appendPeriodRow(f, period, minCount, maxCount) {
+function appendPeriodRow(f, period, minCount, maxCount, borderTop) {
   const row = document.createElement('TR');
+  if(borderTop) row.classList.add('borderTop');
 
   ui.appendElementWithText(row, 'TD', period.label);
   ui.appendElementWithText(row, 'TD', period.minCount);
@@ -51,8 +55,13 @@ function buildPeriodStatsUI(stats) {
   const f = document.createDocumentFragment();
 
   appendPeriodHeaderRow(f, stats.minCount, stats.maxCount);
+  var borderTop = false;
   for(var period of stats.periods) {
-    appendPeriodRow(f, period, stats.minCount, stats.maxCount);
+    if(period) {
+      appendPeriodRow(f, period, stats.minCount, stats.maxCount, borderTop);
+      borderTop = false;
+    }
+    else borderTop = true;
   }
 
   periodStatsTable.appendChild(f);
