@@ -10,7 +10,7 @@ const statsView = ui.fromID('statsView'),
 function appendPeriodHeaderRow(f, minCount, maxCount) {
   const row = document.createElement('TR');
 
-  ui.appendElementWithText(row, 'TH', 'days');
+  ui.appendElementWithText(row, 'TH', ' ');
   ui.appendElementWithText(row, 'TH', 'min');
   ui.appendElementWithText(row, 'TH', 'avg');
   ui.appendElementWithText(row, 'TH', 'max');
@@ -34,7 +34,7 @@ function appendBar(f, x, width) {
 function appendPeriodRow(f, period, minCount, maxCount) {
   const row = document.createElement('TR');
 
-  ui.appendElementWithText(row, 'TD', period.days);
+  ui.appendElementWithText(row, 'TD', period.label);
   ui.appendElementWithText(row, 'TD', period.minCount);
   ui.appendElementWithText(row, 'TD', period.averageCount.toFixed(1));
   ui.appendElementWithText(row, 'TD', period.maxCount);

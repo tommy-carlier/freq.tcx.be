@@ -11,12 +11,17 @@ class Statistics {
     this.hourCounts = new Map();
     this.maxHourCount = 0;
     this.periods = [
-      new PeriodStatistics(this.today, 90),
-      new PeriodStatistics(this.today, 60),
-      new PeriodStatistics(this.today, 30),
-      new PeriodStatistics(this.today, 14),
-      new PeriodStatistics(this.today, 7)
+      createDayPeriodStatistics(this.today, 90),
+      createDayPeriodStatistics(this.today, 60),
+      createDayPeriodStatistics(this.today, 30),
+      createDayPeriodStatistics(this.today, 14),
+      createDayPeriodStatistics(this.today, 7)
     ];
+
+    function createDayPeriodStatistics(today, days) {
+      const minDateMs = time.addDays(today, -days).valueOf();
+      return new PeriodStatistics(days + 'd', date => date.valueOf() >= minDateMs);
+    }
   }
 
   async loadOccurrences(target) {
@@ -72,9 +77,9 @@ class Statistics {
 }
 
 class PeriodStatistics {
-  constructor(today, days) {
-    this.days = days;
-    this.minDateMs = time.addDays(today, -days).valueOf();
+  constructor(label, datePredicate) {
+    this.label = label;
+    this.datePredicate = datePredicate;
     this.minCount = 0;
     this.maxCount = 0;
     this.totalCount = 0;
@@ -83,7 +88,7 @@ class PeriodStatistics {
   }
 
   addDayCount(date, count) {
-    if(date.valueOf() >= this.minDateMs) {
+    if(this.datePredicate(date)) {
       if(this.minCount == 0 || count < this.minCount) this.minCount = count;
       if(count > this.maxCount) this.maxCount = count;
       this.totalCount += count;
