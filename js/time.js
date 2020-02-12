@@ -52,6 +52,7 @@ return formatTimeComponent(t.getHours()) + ':' + formatTimeComponent(t.getMinute
 const DATE_FORMAT_TITLE = Intl.DateTimeFormat([], { year:'numeric', month:'short', day:'numeric' });
 const DATE_FORMAT_NAV = Intl.DateTimeFormat([], { month:'short', day:'numeric' });
 const DATE_FORMAT_LIST = Intl.DateTimeFormat([], { year:'numeric', month:'2-digit', day:'2-digit' });
+const DATE_FORMAT_WEEKDAY = Intl.DateTimeFormat([], { weekday:'short' });
 
 function formatDateTitle(dt) {
     return DATE_FORMAT_TITLE.format(dt);
@@ -63,6 +64,19 @@ function formatDateNav(dt) {
 
 function formatDateList(dt) {
     return DATE_FORMAT_LIST.format(dt);
+}
+
+const weekDayLabels = (function() {
+    var labels = ['', '', '', '', '', '', ''], dt = today();
+    for(var i = 0; i < 7; i++) {
+        labels[dt.getDay()] = DATE_FORMAT_WEEKDAY.format(dt);
+        dt = nextDate(dt);
+    }
+    return labels;
+}());
+
+function getWeekDayLabel(weekDay) {
+    return weekDay >= 0 && weekDay < 7 ? weekDayLabels[weekDay] : '???';
 }
 
 function formatTimeOccurrence(dt) {
@@ -92,6 +106,6 @@ function parseOccurrenceTarget(target) {
 export default {
     addDays, prevDate, nextDate, startOfDay, endOfDay, fractionalTimeOfDay, today, isToday,
     formatDateTitle, formatDateNav, formatDateList, formatDateIso, formatTimeIso,
-    formatTimeOccurrence, formatOccurrenceTarget,
+    getWeekDayLabel, formatTimeOccurrence, formatOccurrenceTarget,
     parseDateTime, parseOccurrenceTarget
 };
