@@ -49,24 +49,20 @@ function formatTimeIso(t) {
 return formatTimeComponent(t.getHours()) + ':' + formatTimeComponent(t.getMinutes()) + ':' + formatTimeComponent(t.getSeconds());
 }
 
-const DATE_FORMAT_TITLE = { year:'numeric', month:'short', day:'numeric' };
-const DATE_FORMAT_NAV = { month:'short', day:'numeric' };
-const DATE_FORMAT_LIST = { year:'numeric', month:'2-digit', day:'2-digit' };
-
-function formatDate(dt, fmt) {
-  return Intl.DateTimeFormat([], fmt).format(dt);
-}
+const DATE_FORMAT_TITLE = Intl.DateTimeFormat([], { year:'numeric', month:'short', day:'numeric' });
+const DATE_FORMAT_NAV = Intl.DateTimeFormat([], { month:'short', day:'numeric' });
+const DATE_FORMAT_LIST = Intl.DateTimeFormat([], { year:'numeric', month:'2-digit', day:'2-digit' });
 
 function formatDateTitle(dt) {
-    return formatDate(dt, DATE_FORMAT_TITLE);
+    return DATE_FORMAT_TITLE.format(dt);
 }
 
 function formatDateNav(dt) {
-    return formatDate(dt, DATE_FORMAT_NAV);
+    return DATE_FORMAT_NAV.format(dt);
 }
 
 function formatDateList(dt) {
-    return formatDate(dt, DATE_FORMAT_LIST);
+    return DATE_FORMAT_LIST.format(dt);
 }
 
 function formatTimeOccurrence(dt) {
