@@ -197,6 +197,7 @@ button:not(.PrimaryButton) {
 .Bar {
   display: inline-block;
   background: #914CCE;
+  min-width: 0.1em;
   height: 0.7em;
 }
 

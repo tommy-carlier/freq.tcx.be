@@ -5,9 +5,10 @@ import ui from './ui.js';
 const statsView = ui.fromID('statsView'),
       timeOfDayTable = ui.fromID('timeOfDay'),
       recentDaysTable = ui.fromID('recentDays'),
-      periodStatsTable = ui.fromID('periodStats');
+      periodStatsTable = ui.fromID('periodStats'),
+      weekDayStatsTable = ui.fromID('weekDayStats');
 
-function appendPeriodHeaderRow(f, minCount, maxCount) {
+function appendStatHeaderRow(f) {
   const row = document.createElement('TR');
 
   ui.appendElementWithText(row, 'TH', ' ');
@@ -34,37 +35,30 @@ function appendBar(f, x, width) {
   return bar;
 }
 
-function appendPeriodRow(f, period, minCount, maxCount, borderTop) {
+function appendStatRow(f, bucket, maxCount) {
   const row = document.createElement('TR');
-  if(borderTop) row.classList.add('borderTop');
 
-  ui.appendElementWithText(row, 'TD', period.label);
-  ui.appendElementWithText(row, 'TD', period.minCount);
-  ui.appendElementWithText(row, 'TD', period.averageCount.toFixed(1));
-  ui.appendElementWithText(row, 'TD', period.maxCount);
+  ui.appendElementWithText(row, 'TD', bucket.label);
+  ui.appendElementWithText(row, 'TD', bucket.minCount);
+  ui.appendElementWithText(row, 'TD', bucket.averageCount.toFixed(1));
+  ui.appendElementWithText(row, 'TD', bucket.maxCount);
 
   const barCell = ui.appendElement(row, 'TD');
-  const divisor = maxCount - minCount;
-  appendBar(barCell, (period.minCount - minCount) / divisor, (period.averageCount - period.minCount) / divisor).classList.add('light');
-  appendBar(barCell, 0, (period.maxCount - period.averageCount) / divisor);
+  appendBar(barCell, bucket.minCount / maxCount, (bucket.averageCount - bucket.minCount) / maxCount).classList.add('light');
+  appendBar(barCell, 0, (bucket.maxCount - bucket.averageCount) / maxCount);
 
   f.appendChild(row);
 }
 
-function buildPeriodStatsUI(stats) {
+function buildStatsUI(table, buckets, maxCount) {
   const f = document.createDocumentFragment();
 
-  appendPeriodHeaderRow(f, stats.minCount, stats.maxCount);
-  var borderTop = false;
-  for(var period of stats.periods) {
-    if(period) {
-      appendPeriodRow(f, period, stats.minCount, stats.maxCount, borderTop);
-      borderTop = false;
-    }
-    else borderTop = true;
+  appendStatHeaderRow(f);
+  for(var bucket of buckets) {
+    appendStatRow(f, bucket, maxCount);
   }
 
-  periodStatsTable.appendChild(f);
+  table.appendChild(f);
 }
 
 function appendTimeRow(f, hour, count, maxCount) {
@@ -116,7 +110,8 @@ async function loadStatistics(target) {
   const stats = new Statistics();
   await stats.loadOccurrences(target);
 
-  buildPeriodStatsUI(stats);
+  buildStatsUI(periodStatsTable, stats.periodBuckets, stats.maxCount);
+  buildStatsUI(weekDayStatsTable, stats.weekDayBuckets, stats.maxCount);
   buildTimeOfDayUI(stats);
   buildRecentDaysUI(stats);
 }

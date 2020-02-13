@@ -5,47 +5,48 @@ class Statistics {
   constructor() {
     this.today = time.today();
     this.minDateDayCountsMs = time.addDays(this.today, -30).valueOf();
-    this.minCount = 0;
     this.maxCount = 0;
     this.dayCounts = new Map();
     this.hourCounts = new Map();
     this.maxHourCount = 0;
-    this.periods = [
-      createDayPeriodStats(this.today, 90),
-      createDayPeriodStats(this.today, 60),
-      createDayPeriodStats(this.today, 30),
-      createDayPeriodStats(this.today, 14),
-      createDayPeriodStats(this.today, 7),
-      null,
-      createWeekDayStats(1),
-      createWeekDayStats(2),
-      createWeekDayStats(3),
-      createWeekDayStats(4),
-      createWeekDayStats(5),
-      createWeekDayStats(6),
-      createWeekDayStats(0)
-    ];
-
-    function createDayPeriodStats(today, days) {
-      const minDateMs = time.addDays(today, -days).valueOf();
-      return new PeriodStatistics(days + 'd', date => date.valueOf() >= minDateMs);
-    }
-
-    function createWeekDayStats(weekDay) {
-      return new PeriodStatistics(time.getWeekDayLabel(weekDay), date => date.getDay() == weekDay);
-    }
+    this.buckets = [];
+    this.periodBuckets = [];
+    this.weekDayBuckets = [];
   }
 
   async loadOccurrences(target) {
     const self = this, maxDateValue = self.today.valueOf();
     var currentDate = new Date(0), currentCount = 0, minDateValue = 0;
 
+    addPeriod(120);
+    addPeriod(90);
+    addPeriod(60);
+    addPeriod(30);
+    addPeriod(14);
+    addPeriod(7);
+    for(var i = 1; i <= 6; i++) addWeekDay(i);
+    addWeekDay(0);
+
+    function addPeriod(days) {
+      const minDateMs = time.addDays(self.today, -days).valueOf();
+      addBucket(self.periodBuckets, new StatBucket(days + 'd', date => date.valueOf() >= minDateMs));
+    }
+
+    function addWeekDay(weekDay) {
+      addBucket(self.weekDayBuckets, new StatBucket(time.getWeekDayLabel(weekDay), date => date.getDay() == weekDay));
+    }
+
+    function addBucket(specificBuckets, bucket) {
+      self.buckets.push(bucket);
+      specificBuckets.push(bucket);
+    }
+
     function finishCurrentDate() {
       if(currentCount > 0) {
         if(currentDate.valueOf() >= self.minDateDayCountsMs) self.dayCounts.set(currentDate, currentCount);
         if(currentCount > self.maxCount) self.maxCount = currentCount;
-        for(var period of self.periods) {
-          if(period) period.addDayCount(currentDate, currentCount);
+        for(var bucket of self.buckets) {
+          bucket.addDayCount(currentDate, currentCount);
         }
       }
     }
@@ -81,16 +82,13 @@ class Statistics {
     });
 
     finishCurrentDate();
-    for(var period of self.periods) {
-      if(period) {
-        period.finish();
-        if(this.minCount == 0 || period.minCount < this.minCount) this.minCount = period.minCount;
-      }
+    for(var bucket of self.buckets) {
+      bucket.finish();
     }
   }
 }
 
-class PeriodStatistics {
+class StatBucket {
   constructor(label, datePredicate) {
     this.label = label;
     this.datePredicate = datePredicate;
