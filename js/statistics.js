@@ -8,6 +8,8 @@ class Statistics {
     this.maxCount = 0;
     this.dayCounts = new Map();
     this.hourCounts = new Map();
+    this.freqDist = new Map();
+    this.maxFreqCount = 0;
     this.maxHourCount = 0;
     this.buckets = [];
     this.periodBuckets = [];
@@ -43,12 +45,19 @@ class Statistics {
 
     function finishCurrentDate() {
       if(currentCount > 0) {
+        incrementFreqDist(currentCount);
         if(currentDate.valueOf() >= self.minDateDayCountsMs) self.dayCounts.set(currentDate, currentCount);
         if(currentCount > self.maxCount) self.maxCount = currentCount;
         for(var bucket of self.buckets) {
           bucket.addDayCount(currentDate, currentCount);
         }
       }
+    }
+
+    function incrementFreqDist(freq) {
+      const count = (self.freqDist.get(freq)||0) + 1;
+      if(count > self.maxFreqCount) self.maxFreqCount = count;
+      self.freqDist.set(freq, count);
     }
 
     function addHourCount(hour, count) {
@@ -68,7 +77,7 @@ class Statistics {
       } else addHourCount(hour, datePct);
     }
 
-    await data.getOccurrencesBetween(target, time.addDays(self.today, -90), self.today, occ => {
+    await data.getOccurrencesBetween(target, time.addDays(self.today, -120), self.today, occ => {
       const date = time.startOfDay(occ);
       if(date.valueOf() != currentDate.valueOf()) {
         finishCurrentDate();

@@ -4,7 +4,7 @@ import dayView from './dayView.js';
 
 (async function() {
   const target = ui.getTarget(document.body);
-  await data.deleteOldOccurrences(target, 90);
+  await data.deleteOldOccurrences(target, 120);
   await dayView.navToDay(new Date());
 }());
 

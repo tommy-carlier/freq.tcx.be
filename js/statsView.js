@@ -3,12 +3,13 @@ import Statistics from './statistics.js';
 import ui from './ui.js';
 
 const statsView = ui.fromID('statsView'),
-      timeOfDayTable = ui.fromID('timeOfDay'),
-      recentDaysTable = ui.fromID('recentDays'),
       periodStatsTable = ui.fromID('periodStats'),
-      weekDayStatsTable = ui.fromID('weekDayStats');
+      weekDayStatsTable = ui.fromID('weekDayStats'),
+      freqDistTable = ui.fromID('freqDist'),
+      timeOfDayTable = ui.fromID('timeOfDay'),
+      recentDaysTable = ui.fromID('recentDays');
 
-function appendStatHeaderRow(f) {
+function appendStatHeader(f) {
   const row = document.createElement('TR');
 
   ui.appendElementWithText(row, 'TH', ' ');
@@ -53,12 +54,43 @@ function appendStatRow(f, bucket, maxCount) {
 function buildStatsUI(table, buckets, maxCount) {
   const f = document.createDocumentFragment();
 
-  appendStatHeaderRow(f);
+  appendStatHeader(f);
   for(var bucket of buckets) {
     appendStatRow(f, bucket, maxCount);
   }
 
   table.appendChild(f);
+}
+
+function appendFreqDistHeader(f) {
+  const row = document.createElement('TR');
+
+  ui.appendElementWithText(row, 'TH', 'freq');
+  ui.appendElementWithText(row, 'TH', 'count');
+  ui.appendElementWithText(row, 'TH', '');
+
+  f.appendChild(row);
+}
+
+function appendFreqDistRow(f, freq, count, maxCount) {
+  const row = document.createElement('TR');
+
+  ui.appendElementWithText(row, 'TD', freq);
+  ui.appendElementWithText(row, 'TD', count);
+  appendBar(ui.appendElement(row, 'TD'), 0, count / maxCount);
+
+  f.appendChild(row);
+}
+
+function buildFreqDistUI(stats) {
+  const f = document.createDocumentFragment();
+
+  appendFreqDistHeader(f);
+  for(var i = 0; i <= stats.maxCount; i++) {
+    appendFreqDistRow(f, i, stats.freqDist.get(i)||0, stats.maxFreqCount);
+  }
+
+  freqDistTable.appendChild(f);
 }
 
 function appendTimeRow(f, hour, count, maxCount) {
@@ -104,6 +136,8 @@ function buildRecentDaysUI(stats) {
 
 async function loadStatistics(target) {
   ui.removeAllChildren(periodStatsTable);
+  ui.removeAllChildren(weekDayStatsTable);
+  ui.removeAllChildren(freqDistTable);
   ui.removeAllChildren(timeOfDayTable);
   ui.removeAllChildren(recentDaysTable);
   
@@ -112,6 +146,7 @@ async function loadStatistics(target) {
 
   buildStatsUI(periodStatsTable, stats.periodBuckets, stats.maxCount);
   buildStatsUI(weekDayStatsTable, stats.weekDayBuckets, stats.maxCount);
+  buildFreqDistUI(stats);
   buildTimeOfDayUI(stats);
   buildRecentDaysUI(stats);
 }
