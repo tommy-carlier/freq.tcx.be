@@ -66,7 +66,7 @@ function appendFreqDistHeader(f) {
   const row = document.createElement('TR');
 
   ui.appendElementWithText(row, 'TH', 'freq');
-  ui.appendElementWithText(row, 'TH', 'count');
+  ui.appendElementWithText(row, 'TH', '#');
   ui.appendElementWithText(row, 'TH', '');
 
   f.appendChild(row);
