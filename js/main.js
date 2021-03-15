@@ -11,3 +11,4 @@ import dayView from './dayView.js';
 applicationCache.addEventListener('updateready', ev => { location.reload(); });
 
 document.addEventListener('touchstart', () => { }, false);
+window.addEventListener('error', ev => { alert(ev.message + '\n\n' + JSON.stringify(ev)); });
