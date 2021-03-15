@@ -8,7 +8,6 @@ import dayView from './dayView.js';
   await dayView.navToDay(new Date());
 }());
 
-applicationCache.addEventListener('updateready', ev => { location.reload(); });
-
-document.addEventListener('touchstart', () => { }, false);
 window.addEventListener('error', ev => { alert(ev.message + '\n\n' + JSON.stringify(ev)); });
+applicationCache.addEventListener('updateready', ev => { location.reload(); });
+document.addEventListener('touchstart', () => { }, false);
