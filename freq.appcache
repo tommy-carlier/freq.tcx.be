@@ -19,3 +19,6 @@ CACHE:
 /js/editView.js
 /js/statsView.js
 /js/dataView.js
+
+NETWORK:
+*
