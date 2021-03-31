@@ -8,7 +8,7 @@ html, body {
 }
 
 body, h1, button, input {
-  font: normal 14pt/1.7 'Comic Sans MS','Chalkboard SE',sans-serif;
+  font: normal 14pt/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 }
 
 button {
