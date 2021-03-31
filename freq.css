@@ -140,6 +140,7 @@ button:not(.PrimaryButton) {
 
 .OccurrenceList {
   display: inline-block;
+  text-align: left;
   padding: 0;
 }
 
