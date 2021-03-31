@@ -8,7 +8,7 @@ html, body {
 }
 
 body, h1, button, input {
-  font: normal 14pt/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font: normal 13pt/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 }
 
 button {
@@ -83,7 +83,7 @@ label > input {
   flex-grow: 1;
   font-weight: bold;
   line-height: 3rem;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.03em;
 }
 
 button:not(.PrimaryButton) {
